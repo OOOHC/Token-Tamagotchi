@@ -23,7 +23,7 @@ Data sources define the core privacy and architecture boundary for Token Tamagot
 
 ### Mock Provider
 
-Deterministic development data used to build and test the desktop pet before real quota input is available.
+Deterministic development data used to build and test the desktop companion before real quota input is available.
 
 ### Manual Provider
 

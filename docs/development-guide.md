@@ -15,6 +15,8 @@ npm install
 cargo build
 ```
 
+For a fast first check, these are the only commands a new contributor needs before reading deeper docs.
+
 ## Development
 
 ```bash

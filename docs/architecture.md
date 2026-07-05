@@ -36,3 +36,28 @@ apps/desktop/src
 ```
 
 UI must not know parser internals. Commands must not implement business rules. Core crates must not depend on React or Tauri.
+
+## Privacy Implementation
+
+Token Tamagotchi is local-first by design.
+
+- The app does not collect OpenAI credentials.
+- The app does not scrape private dashboards.
+- The app does not upload quota data.
+- Parsed quota snapshots are stored locally.
+- Raw CLI text is never stored unless explicitly enabled for local history/debugging.
+
+By default, `quota_snapshots` store parsed values and `raw_input_sha256`, not raw CLI text. Raw text belongs only in the opt-in `raw_imports_optional` table.
+
+## Project Layout
+
+```text
+token-tamagotchi/
+|-- apps/desktop/              # Tauri desktop app, React + Vite frontend
+|-- crates/token-core/         # Domain models, quota engine, mood engine
+|-- crates/codex-adapter/      # Codex providers and parser logic
+|-- crates/local-store/        # Local persistence
+|-- fixtures/codex/            # Parser samples
+|-- skins/                     # Companion skins and sprite metadata
+`-- docs/                      # Product, architecture, parser, roadmap docs
+```

@@ -9,8 +9,10 @@
 - [ ] Parser records `confidence`, `parser_warnings`, and `raw_input_sha256`.
 - [ ] SQLite persists parsed quota snapshots across restarts.
 - [ ] Duplicate raw input can be detected through `raw_input_sha256`.
-- [ ] Pet mood changes based on predefined quota thresholds.
+- [ ] Companion mood changes based on predefined quota thresholds.
+- [ ] UI shows quota as a token food meter.
 - [ ] UI shows 5-hour quota, total quota, parser confidence, and key warning text.
+- [ ] UI refreshes displayed state and stale-data indicators on an interval.
 - [ ] App requires no network access for quota monitoring.
 
 ## Should Have
@@ -25,5 +27,6 @@
 - [ ] Transparent window.
 - [ ] System tray/menu bar status icon.
 - [ ] Advanced animation system.
+- [ ] AI prediction or prompt/model recommendations.
 - [ ] Skin marketplace or skin editor.
 - [ ] Cross-platform packaging validation for macOS and Linux.
