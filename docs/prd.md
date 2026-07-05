@@ -1,0 +1,43 @@
+# Product Requirement Document (PRD)
+
+## Target Audience
+
+Codex CLI users who want a non-intrusive, local-only way to monitor quota pressure while coding.
+
+## MVP Features
+
+1. **Status Import**
+   Manual paste/import of user-provided Codex CLI `/status` output.
+
+2. **Quota Parsing**
+   Parse 5-hour remaining quota, total remaining quota, reset timing, source, timestamp, and parser confidence into `QuotaSnapshot`.
+
+3. **Quota Persistence**
+   Store parsed quota snapshots in SQLite. Raw command output is local-only and opt-in.
+
+4. **Visual Feedback**
+   Show a floating desktop pet window representing quota health through mood, color/expression, and short status copy.
+
+5. **Manual/Mock Fallback**
+   Support mock and manual quota providers so the app remains useful before Codex parsing is fully stable.
+
+6. **Platform Target**
+   Primary development target is Windows. The architecture should remain compatible with macOS and Linux through Tauri.
+
+## Non-Goals (v0.1)
+
+- Auto-scraping browser dashboards.
+- Automatically executing Codex commands.
+- API key management.
+- Cloud sync or telemetry.
+- Multi-provider support beyond the internal provider contract.
+- Full skin marketplace or advanced animation tooling.
+
+## MVP Acceptance Criteria
+
+- User can paste a Codex `/status` sample.
+- App produces a normalized `QuotaSnapshot`.
+- Snapshot is persisted locally.
+- Pet mood changes when quota thresholds change.
+- Unknown or unsupported input fails gracefully without crashing.
+- No network access is required for quota monitoring.

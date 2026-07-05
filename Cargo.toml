@@ -1,0 +1,12 @@
+[workspace]
+members = [
+  "apps/desktop/src-tauri",
+  "crates/token-core",
+  "crates/codex-adapter",
+  "crates/local-store"
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+license = "MIT"

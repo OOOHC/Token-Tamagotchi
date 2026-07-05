@@ -1,0 +1,6 @@
+5h remaining: 0
+5h limit: 150,000
+total remaining: 500,000
+total limit: 1,500,000
+reset at: 2026-07-05T22:00:00Z
+

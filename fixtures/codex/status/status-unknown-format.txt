@@ -1,0 +1,3 @@
+Codex quota looks healthy.
+There is no parseable structured quota in this sample.
+

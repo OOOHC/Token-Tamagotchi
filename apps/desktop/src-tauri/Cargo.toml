@@ -1,0 +1,20 @@
+[package]
+name = "token-tamagotchi-desktop"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "token_tamagotchi_desktop"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[dependencies]
+codex-adapter = { path = "../../../crates/codex-adapter" }
+local-store = { path = "../../../crates/local-store" }
+token-core = { path = "../../../crates/token-core" }
+serde = { version = "1", features = ["derive"] }
+tauri = { version = "2", features = [] }
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+

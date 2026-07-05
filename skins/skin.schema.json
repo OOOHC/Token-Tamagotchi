@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://token-tamagotchi.local/skin.schema.json",
+  "title": "Token Tamagotchi Skin",
+  "type": "object",
+  "required": ["id", "name", "version", "spritesheet", "moods"],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "spritesheet": {
+      "type": "string"
+    },
+    "tileSize": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "moods": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["x", "y", "frames"],
+        "properties": {
+          "x": { "type": "integer", "minimum": 0 },
+          "y": { "type": "integer", "minimum": 0 },
+          "frames": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  }
+}
+

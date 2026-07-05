@@ -1,0 +1,6 @@
+5h remaining: 95,000
+5h limit: 150,000
+total remaining: 1,050,000
+total limit: 1,500,000
+context: large task in progress
+

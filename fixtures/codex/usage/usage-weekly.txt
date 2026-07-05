@@ -1,0 +1,5 @@
+week: 2026-W27
+input tokens: 210,000
+output tokens: 95,000
+total tokens: 305,000
+

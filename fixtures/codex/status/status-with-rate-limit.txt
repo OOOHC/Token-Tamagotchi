@@ -1,0 +1,7 @@
+5h remaining: 12,000
+5h limit: 150,000
+total remaining: 820,000
+total limit: 1,500,000
+reset at: 2026-07-05T23:00:00Z
+rate limit: approaching
+
