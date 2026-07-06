@@ -12,9 +12,9 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 codex-adapter = { path = "../../../crates/codex-adapter" }
 local-store = { path = "../../../crates/local-store" }
 token-core = { path = "../../../crates/token-core" }
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
 serde = { version = "1", features = ["derive"] }
 tauri = { version = "2", features = [] }
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
-

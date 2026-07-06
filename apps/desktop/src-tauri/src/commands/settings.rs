@@ -13,4 +13,3 @@ pub fn get_settings() -> SettingsResponse {
         provider: "mock".to_string(),
     }
 }
-

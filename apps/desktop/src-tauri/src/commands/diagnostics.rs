@@ -13,4 +13,3 @@ pub fn get_diagnostics() -> DiagnosticsResponse {
         data_source: "mock".to_string(),
     }
 }
-

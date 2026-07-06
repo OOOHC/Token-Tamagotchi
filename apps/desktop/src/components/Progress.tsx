@@ -9,15 +9,14 @@ export function Progress({ label, value, max }: ProgressProps) {
   const text = value !== null && max !== null ? `${value}/${max}` : "Unknown";
 
   return (
-    <div className="progress-row">
-      <div className="progress-header">
+    <div className="food-meter-row">
+      <div className="food-meter-header">
         <span>{label}</span>
         <span>{text}</span>
       </div>
-      <div className="progress-track">
-        <div className="progress-fill" style={{ width: `${percent}%` }} />
+      <div className="food-meter-track" aria-label={`${label} token food meter`}>
+        <div className="food-meter-fill" style={{ width: `${percent}%` }} />
       </div>
     </div>
   );
 }
-

@@ -1,20 +1,31 @@
 import type { Mood, QuotaSnapshot } from "../store/quotaStore";
 
 export function useMood(snapshot: QuotaSnapshot): Mood {
-  if (snapshot.fiveHourRemaining === null || snapshot.fiveHourLimit === null) {
-    return "sleeping";
+  if (
+    snapshot.fiveHourRemaining === null ||
+    snapshot.fiveHourLimit === null ||
+    snapshot.fiveHourLimit === 0
+  ) {
+    return "unknown";
   }
 
-  const ratio = snapshot.fiveHourRemaining / snapshot.fiveHourLimit;
+  const percent = (snapshot.fiveHourRemaining / snapshot.fiveHourLimit) * 100;
 
-  if (ratio <= 0.15) {
-    return "tired";
+  if (percent > 80) {
+    return "happy";
   }
 
-  if (ratio <= 0.5) {
-    return "focused";
+  if (percent >= 50) {
+    return "relaxed";
   }
 
-  return "happy";
+  if (percent >= 20) {
+    return "concerned";
+  }
+
+  if (percent >= 5) {
+    return "panicking";
+  }
+
+  return "exhausted";
 }
-

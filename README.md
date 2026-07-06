@@ -4,6 +4,8 @@
 
 Token Tamagotchi lives on your desktop and keeps an eye on your 5-hour limits, total remaining usage, and token pressure so your workflow does not get interrupted mid-build.
 
+Long term, Token Tamagotchi is designed to evolve from a quota monitor into a lightweight desktop companion that feels present on your desktop.
+
 ## Why
 
 Monitor your Codex quota without opening another dashboard.

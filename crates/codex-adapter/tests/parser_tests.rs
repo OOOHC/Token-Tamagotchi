@@ -16,6 +16,56 @@ fn parses_basic_status_fixture() {
 }
 
 #[test]
+fn parses_complete_status_with_high_confidence() {
+    let input = include_str!("../../../fixtures/codex/status/status-window-reset.txt");
+    let snapshot = parse_status_output(input, "2026-07-05T00:00:00Z");
+
+    assert_eq!(snapshot.five_hour_remaining, Some(150_000));
+    assert_eq!(snapshot.five_hour_limit, Some(150_000));
+    assert_eq!(snapshot.total_remaining, Some(1_110_000));
+    assert_eq!(snapshot.total_limit, Some(1_500_000));
+    assert_eq!(snapshot.reset_at.as_deref(), Some("2026-07-06T01:00:00Z"));
+    assert!(snapshot.parser_warnings.is_empty());
+    assert_eq!(snapshot.confidence, Confidence::High);
+}
+
+#[test]
+fn parses_low_quota_status_with_rate_limit_text() {
+    let input = include_str!("../../../fixtures/codex/status/status-with-rate-limit.txt");
+    let snapshot = parse_status_output(input, "2026-07-05T00:00:00Z");
+
+    assert_eq!(snapshot.five_hour_remaining, Some(12_000));
+    assert_eq!(snapshot.five_hour_limit, Some(150_000));
+    assert_eq!(snapshot.total_remaining, Some(820_000));
+    assert_eq!(snapshot.total_limit, Some(1_500_000));
+    assert_eq!(snapshot.reset_at.as_deref(), Some("2026-07-05T23:00:00Z"));
+    assert!(snapshot.parser_warnings.is_empty());
+    assert_eq!(snapshot.confidence, Confidence::High);
+}
+
+#[test]
+fn parses_zero_remaining_status() {
+    let input = include_str!("../../../fixtures/codex/status/status-zero-remaining.txt");
+    let snapshot = parse_status_output(input, "2026-07-05T00:00:00Z");
+
+    assert_eq!(snapshot.five_hour_remaining, Some(0));
+    assert_eq!(snapshot.five_hour_limit, Some(150_000));
+    assert_eq!(snapshot.total_remaining, Some(500_000));
+    assert_eq!(snapshot.total_limit, Some(1_500_000));
+    assert_eq!(snapshot.confidence, Confidence::High);
+}
+
+#[test]
+fn produces_stable_hash_for_duplicate_raw_input() {
+    let input = include_str!("../../../fixtures/codex/status/status-basic.txt");
+    let first = parse_status_output(input, "2026-07-05T00:00:00Z");
+    let second = parse_status_output(input, "2026-07-05T00:05:00Z");
+
+    assert_eq!(first.raw_input_sha256, second.raw_input_sha256);
+    assert_ne!(first.parsed_at, second.parsed_at);
+}
+
+#[test]
 fn leaves_unknown_format_empty() {
     let input = include_str!("../../../fixtures/codex/status/status-unknown-format.txt");
     let snapshot = parse_status_output(input, "2026-07-05T00:00:00Z");

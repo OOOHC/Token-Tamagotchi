@@ -20,9 +20,21 @@ pub enum Confidence {
 #[serde(rename_all = "kebab-case")]
 pub enum Mood {
     Happy,
-    Focused,
-    Tired,
-    Sleeping,
+    Relaxed,
+    Concerned,
+    Panicking,
+    Exhausted,
+    Celebrating,
+    Unknown,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct CompanionState {
+    pub mood: Mood,
+    pub remaining_percent: Option<f64>,
+    pub expression: String,
+    pub status_copy: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]

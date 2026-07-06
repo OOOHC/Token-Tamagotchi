@@ -36,6 +36,7 @@ Codex users who want a playful, non-intrusive desktop companion for monitoring 5
 - AI prediction or task recommendations.
 - Multi-provider support beyond the internal provider contract.
 - Full skin marketplace or advanced animation tooling.
+- Full transparent-window 3D companion behavior.
 
 ## MVP Acceptance Criteria
 

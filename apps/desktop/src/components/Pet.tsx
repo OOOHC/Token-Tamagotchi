@@ -1,17 +1,16 @@
 import type { Mood } from "../store/quotaStore";
 
-type PetProps = {
+type CompanionProps = {
   mood: Mood;
 };
 
-export function Pet({ mood }: PetProps) {
+export function Companion({ mood }: CompanionProps) {
   return (
-    <div className={`pet pet-${mood}`} aria-label={`Pet mood: ${mood}`}>
-      <div className="pet-face">
-        <span className="pet-eye" />
-        <span className="pet-eye" />
+    <div className={`companion companion-${mood}`} aria-label={`Companion mood: ${mood}`}>
+      <div className="companion-face">
+        <span className="companion-eye" />
+        <span className="companion-eye" />
       </div>
     </div>
   );
 }
-

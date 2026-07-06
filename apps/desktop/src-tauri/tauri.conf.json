@@ -13,9 +13,11 @@
     "windows": [
       {
         "title": "Token Tamagotchi",
-        "width": 320,
-        "height": 420,
+        "width": 360,
+        "height": 640,
+        "center": true,
         "resizable": false,
+        "alwaysOnTop": true,
         "transparent": false,
         "decorations": true
       }
@@ -27,4 +29,3 @@
     "icon": []
   }
 }
-

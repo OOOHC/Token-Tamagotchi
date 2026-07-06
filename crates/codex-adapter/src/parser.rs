@@ -140,10 +140,7 @@ mod tests {
 
     #[test]
     fn calculates_low_confidence_when_no_main_fields_are_present() {
-        assert_eq!(
-            calculate_confidence(None, None, &[]),
-            Confidence::Low
-        );
+        assert_eq!(calculate_confidence(None, None, &[]), Confidence::Low);
     }
 
     #[test]

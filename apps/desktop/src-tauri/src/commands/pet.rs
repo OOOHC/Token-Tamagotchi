@@ -13,4 +13,3 @@ pub fn get_pet_state() -> PetStateResponse {
         mood: "happy".to_string(),
     }
 }
-

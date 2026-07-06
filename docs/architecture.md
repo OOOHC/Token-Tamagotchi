@@ -24,7 +24,7 @@ User-provided Codex CLI text
   -> Storage
   -> Tauri Command
   -> UI State
-  -> Pet Feedback
+  -> Companion Feedback
 ```
 
 ## Dependency Direction
@@ -36,6 +36,15 @@ apps/desktop/src
 ```
 
 UI must not know parser internals. Commands must not implement business rules. Core crates must not depend on React or Tauri.
+
+## Rendering Evolution
+
+v0.1 uses React DOM UI inside a compact Tauri window. Future desktop-presence work should remain a presentation-layer concern:
+
+- **v0.2:** Transparent or borderless Tauri windows, always-on-top behavior, draggable companion surface, and lightweight 2D animation.
+- **v0.3:** Canvas, Three.js, or React Three Fiber for low-poly or voxel-style real-time rendering.
+
+3D rendering must not move quota parsing, mood calculation, or persistence out of `crates/`. The living companion is a richer view of the same normalized `QuotaSnapshot` state.
 
 ## Privacy Implementation
 

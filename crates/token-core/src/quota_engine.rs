@@ -11,3 +11,6 @@ pub fn five_hour_ratio(snapshot: &QuotaSnapshot) -> Option<f64> {
     Some(remaining as f64 / limit as f64)
 }
 
+pub fn five_hour_percent(snapshot: &QuotaSnapshot) -> Option<f64> {
+    five_hour_ratio(snapshot).map(|ratio| (ratio * 100.0).clamp(0.0, 100.0))
+}

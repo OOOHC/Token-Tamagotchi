@@ -1,6 +1,13 @@
 import { create } from "zustand";
 
-export type Mood = "happy" | "focused" | "tired" | "sleeping";
+export type Mood =
+  | "happy"
+  | "relaxed"
+  | "concerned"
+  | "panicking"
+  | "exhausted"
+  | "celebrating"
+  | "unknown";
 
 export type QuotaSnapshot = {
   fiveHourRemaining: number | null;

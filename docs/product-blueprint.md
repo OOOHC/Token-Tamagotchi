@@ -43,20 +43,54 @@ This gives the monitor a memorable personality without weakening its role as a d
 
 Use **desktop companion** in product-facing language. Avoid leading with **desktop pet**, which makes the product sound less like a developer tool.
 
-The product should feel playful, but the language should stay useful. Prefer status-style copy that blends emotion with information:
+The product should feel playful, but the language should stay useful. The companion can express emotion, but its copy must also communicate quota state or next action.
+
+Prefer status-style copy that blends feeling with information:
 
 ```text
 [Status]: Low Quota
 [Suggestion]: Refactor Prompt
 ```
 
+Avoid generic cute-only copy such as "I'm hungry" when the same moment can carry useful context. A stronger version is:
+
+```text
+[Status]: Low Quota. Suggestion: Refactor Prompt.
+```
+
 ## Visual Direction
 
 - Use pixel art or terminal-style UI.
-- Avoid a soft cartoon toy aesthetic.
+- Favor techy blocks, pixels, terminal cells, and compact sprite shapes.
+- Avoid a soft, round, toy-like cartoon aesthetic.
 - Keep the window compact and glanceable.
 - Treat the progress bar as a token food meter.
 - Let expressions and short status text carry the companion's mood.
+
+The companion should feel like it came from the code world, not like a decorative desktop widget.
+
+## UI Metaphor
+
+The quota progress bar is a semi-transparent token food meter. As quota is consumed, the food meter empties and the companion becomes more concerned.
+
+This metaphor should guide the first UI implementation:
+
+- The food meter must be visible at a glance.
+- The companion state must be derived from remaining quota thresholds.
+- The UI should pair every emotional state with concrete quota information.
+- Low quota states should reduce anxiety by being expressive, but never hide the actual numbers.
+
+## Long-Term Companion Vision
+
+The final form is not a dashboard. Token Tamagotchi should evolve into a desktop-level interactive companion: a small, always-present entity that appears to live on the user's desktop.
+
+The product should evolve through three visual layers:
+
+1. **Monitor:** readable quota state, parser confidence, warnings, and token food meter.
+2. **Companion:** compact always-on-top desktop presence with lightweight motion and click/drag feedback.
+3. **Living Entity:** animated 2D/3D presence with idle behavior, mouse awareness, and quota-reactive motion.
+
+Catdeskpet-style desktop presence is a useful interaction reference, but product-facing language should remain **desktop companion**. The goal is a developer tool with presence, not an entertainment pet.
 
 ## MVP
 

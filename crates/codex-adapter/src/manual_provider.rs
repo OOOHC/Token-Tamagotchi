@@ -17,4 +17,3 @@ impl QuotaProvider for ManualProvider {
         Ok(self.snapshot.clone())
     }
 }
-
