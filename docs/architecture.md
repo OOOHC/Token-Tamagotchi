@@ -18,8 +18,8 @@
 ## Data Flow
 
 ```text
-User-provided Codex CLI text
-  -> Provider/Adapter
+Codex app-server rate limits
+  -> Codex Provider/Adapter
   -> QuotaSnapshot
   -> Storage
   -> Tauri Command
@@ -37,12 +37,14 @@ apps/desktop/src
 
 UI must not know parser internals. Commands must not implement business rules. Core crates must not depend on React or Tauri.
 
+Manual import and parser fixtures follow the same adapter shape, but they are debug/fallback paths rather than the default product experience.
+
 ## Rendering Evolution
 
-v0.1 uses React DOM UI inside a compact Tauri window. Future desktop-presence work should remain a presentation-layer concern:
+The current app uses React DOM UI inside a compact Tauri window. Desktop-presence work should remain a presentation-layer concern:
 
-- **v0.2:** Transparent or borderless Tauri windows, always-on-top behavior, draggable companion surface, and lightweight 2D animation.
-- **v0.3:** Canvas, Three.js, or React Three Fiber for low-poly or voxel-style real-time rendering.
+- **v0.2:** Transparent/borderless Tauri windows, always-on-top behavior, draggable companion surface, edge-aware panels, and lightweight 2D animation.
+- **v0.3:** Canvas, Three.js, or React Three Fiber for low-poly or voxel-style real-time rendering, richer idle motion, and stronger desktop-entity behavior.
 
 3D rendering must not move quota parsing, mood calculation, or persistence out of `crates/`. The living companion is a richer view of the same normalized `QuotaSnapshot` state.
 
@@ -53,6 +55,7 @@ Token Tamagotchi is local-first by design.
 - The app does not collect OpenAI credentials.
 - The app does not scrape private dashboards.
 - The app does not upload quota data.
+- The app reads local Codex rate-limit state through a user-local Codex process.
 - Parsed quota snapshots are stored locally.
 - Raw CLI text is never stored unless explicitly enabled for local history/debugging.
 

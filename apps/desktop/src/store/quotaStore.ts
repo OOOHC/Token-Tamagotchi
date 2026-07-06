@@ -15,7 +15,7 @@ export type QuotaSnapshot = {
   totalRemaining: number | null;
   totalLimit: number | null;
   resetAt: string | null;
-  source: "codex-cli" | "manual" | "mock";
+  source: "codex-cli" | "codex-local" | "codex-app-server" | "manual" | "mock";
   confidence: "high" | "medium" | "low";
   parsedAt: string;
   rawInputSha256: string | null;

@@ -13,7 +13,9 @@ codex-adapter = { path = "../../../crates/codex-adapter" }
 local-store = { path = "../../../crates/local-store" }
 token-core = { path = "../../../crates/token-core" }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
 serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 tauri = { version = "2", features = [] }
 
 [build-dependencies]

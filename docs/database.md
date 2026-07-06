@@ -18,7 +18,7 @@ Default persistence for normalized quota state. This table is safe for general t
 | total_remaining | INTEGER NULL | Parsed token count |
 | total_limit | INTEGER NULL | Parsed token count |
 | reset_at | TEXT NULL | Source-provided reset timestamp |
-| source | TEXT NOT NULL | `codex-cli`, `manual`, `mock` |
+| source | TEXT NOT NULL | `codex-app-server`, `codex-local`, `codex-cli`, `manual`, `mock` |
 | confidence | TEXT NOT NULL | `high`, `medium`, `low` |
 | raw_input_sha256 | TEXT NULL | Deduplication key; may link to `raw_imports_optional` when raw history is enabled |
 | parser_warnings_json | TEXT NOT NULL | JSON array of parser warnings |

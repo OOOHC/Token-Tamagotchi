@@ -167,6 +167,8 @@ fn optional_i64_to_u64(value: Option<i64>) -> Option<u64> {
 fn source_to_str(source: &QuotaSource) -> &'static str {
     match source {
         QuotaSource::CodexCli => "codex-cli",
+        QuotaSource::CodexLocal => "codex-local",
+        QuotaSource::CodexAppServer => "codex-app-server",
         QuotaSource::Manual => "manual",
         QuotaSource::Mock => "mock",
     }
@@ -175,6 +177,8 @@ fn source_to_str(source: &QuotaSource) -> &'static str {
 fn source_from_str(source: &str) -> QuotaSource {
     match source {
         "codex-cli" => QuotaSource::CodexCli,
+        "codex-local" => QuotaSource::CodexLocal,
+        "codex-app-server" => QuotaSource::CodexAppServer,
         "manual" => QuotaSource::Manual,
         "mock" => QuotaSource::Mock,
         _ => QuotaSource::Manual,

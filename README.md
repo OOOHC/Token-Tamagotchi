@@ -1,8 +1,8 @@
 # Token Tamagotchi
 
-**A playful desktop companion for monitoring your Codex quota, 5-hour limits, and total usage.**
+**A playful desktop companion for monitoring your Codex quota, 5-hour limits, and 7-day usage pressure.**
 
-Token Tamagotchi lives on your desktop and keeps an eye on your 5-hour limits, total remaining usage, and token pressure so your workflow does not get interrupted mid-build.
+Token Tamagotchi lives on your desktop and keeps an eye on your 5-hour limits, 7-day remaining usage, and token pressure so your workflow does not get interrupted mid-build.
 
 Long term, Token Tamagotchi is designed to evolve from a quota monitor into a lightweight desktop companion that feels present on your desktop.
 
@@ -12,14 +12,16 @@ Monitor your Codex quota without opening another dashboard.
 
 Codex quota pressure is easiest to miss when you are already deep in a refactor, PR review, or long coding task. Token Tamagotchi turns that pressure into an ambient desktop signal you can understand at a glance.
 
-## MVP Features
+## Current Features
 
 - Tiny desktop companion.
-- 5-hour quota display.
-- Total remaining usage display.
-- Auto refresh for displayed quota state.
-- Low quota alerts.
+- Automatic local Codex rate-limit reading through `codex app-server --stdio`.
+- 5-hour and 7-day remaining food meters.
+- Details panel with used tokens, estimated total tokens, and reset timing.
+- Auto refresh and manual refresh.
+- Low quota local alerts.
 - Mood changes based on remaining quota.
+- Debug section for parser/manual input fallback.
 
 ## Quick Start
 
@@ -37,6 +39,7 @@ cargo build
 - [Parser Contract](docs/parser-contract.md)
 - [Database Schema](docs/database.md)
 - [MVP Acceptance Checklist](docs/mvp-acceptance-checklist.md)
+- [v0.2 Acceptance Checklist](docs/v0.2-acceptance-checklist.md)
 - [Roadmap](docs/roadmap.md)
 - [Development Guide](docs/development-guide.md)
 

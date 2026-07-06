@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "kebab-case")]
 pub enum QuotaSource {
     CodexCli,
+    CodexLocal,
+    CodexAppServer,
     Manual,
     Mock,
 }

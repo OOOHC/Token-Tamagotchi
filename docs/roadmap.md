@@ -29,19 +29,40 @@ Goal: monitor Codex quota pressure through a playful desktop companion.
 
 Goal: make Token Tamagotchi feel like a small desktop presence rather than a normal utility window.
 
-- Improved parser coverage from fixtures.
-- Better mood transitions and stale-data states.
-- Notifications or gentle local reminders.
-- Always-on-top/window behavior settings.
-- History/trend summaries from local snapshots.
-- Better warning copy from `parser_warnings`.
-- Transparent or borderless companion window exploration.
-- Basic click/drag interactions and lightweight idle animation.
+- Official Codex app-server rate-limit source through local `codex app-server --stdio`.
+- Auto refresh for 5-hour and 7-day remaining percentages.
+- Token usage diagnostics for 5-hour and 7-day windows.
+- Estimated total token capacity derived from local usage and official used percentages.
+- 5-hour and 7-day reset timing in the details panel.
+- Manual refresh, sync status, offline/error state, and low-quota local alert.
+- Transparent, borderless, always-on-top companion window exploration.
+- Default mode shows only the live mood companion.
+- Companion mood updates from the configured quota thresholds.
+- Click companion to show a temporary quota mood/status message bubble.
+- Food-meter toggle appears after interacting with the companion.
+- Side toggle reveals mini controls, 5-hour and 7-day food meters, and Details.
+- Dragging the companion surface repositions the floating window.
+- Window size adapts to companion-only, status bubble, food-meter, and details modes.
+- Window position is constrained to the current screen so the companion and expanded panels remain reachable.
+- Expanded panels can appear above or below the companion depending on screen position.
+- Details content scrolls inside the details panel without adding a scrollbar to the companion surface.
+- Basic click interaction, mood-specific facial expression, and lightweight idle/mood animation.
+- Debug layer for local logs, manual import, source checks, and parser diagnostics.
+
+Deferred from v0.2:
+
+- System tray/menu bar status.
+- Persistent history/trend charting.
+- Full OS-level notification integration.
+- Window behavior settings UI.
+- True no-window desktop entity behavior.
 
 ## v0.3: Living Entity
 
 Goal: evolve the companion into an animated desktop entity while keeping quota logic local and testable.
 
+- True desktop-entity presentation with no obvious rectangular window surface.
+- Better drag/positioning behavior for a companion that lives on the desktop.
 - Skin manifest support and first alternate skin.
 - Provider contract stabilization.
 - Additional CLI adapters, such as Claude or OpenRouter, if they fit the same local-first model.

@@ -54,7 +54,7 @@ export function StatusImport({ onParsed }: StatusImportProps) {
       />
       <div className="import-actions">
         <button className="import-button" type="button" onClick={parseStatusText} disabled={isParsing}>
-          {isParsing ? "Parsing" : "Import"}
+          {isParsing ? "Parsing" : "Feed"}
         </button>
         {status ? <span className="import-status">{status}</span> : null}
         {error ? <span className="import-error">{error}</span> : null}

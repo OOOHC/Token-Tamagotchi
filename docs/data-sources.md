@@ -1,11 +1,11 @@
 # Data Sources
 
-Data sources define the core privacy and architecture boundary for Token Tamagotchi. The app is local-first: it does not connect to external quota services, scrape browser sessions, or automatically read private Codex state in the MVP.
+Data sources define the core privacy and architecture boundary for Token Tamagotchi. The app is local-first: it does not connect to external quota services, scrape browser sessions, or read credentials.
 
 ## Data Source Principles
 
-1. User-initiated input only.
-   The app accepts quota data through user paste/import flows. It does not execute Codex commands automatically in the MVP.
+1. Local-only by default.
+   Automatic sources must read local files or local process output only. They must not call model APIs, scrape browser sessions, or proxy user traffic by default.
 
 2. Adapter normalization.
    Every source must normalize into `QuotaSnapshot` before reaching UI, storage, or mood logic.
@@ -25,15 +25,37 @@ Data sources define the core privacy and architecture boundary for Token Tamagot
 
 Deterministic development data used to build and test the desktop companion before real quota input is available.
 
+### Codex App-Server Rate Limits
+
+The primary real-world MVP input is Codex's local app-server protocol. Token Tamagotchi starts `codex app-server --stdio`, initializes a local protocol session, and calls the read-only `account/rateLimits/read` method.
+
+This source provides the values that align with Codex's own usage UI:
+
+- 5-hour window usage: `rateLimits.primary.usedPercent`.
+- 5-hour reset timing: `rateLimits.primary.resetsAt`.
+- Long window usage: `rateLimits.secondary.usedPercent`.
+- Long window reset timing: `rateLimits.secondary.resetsAt`.
+
+Token Tamagotchi derives remaining food meters as `100 - usedPercent`. This source does not start a Codex turn and does not spend model tokens.
+
+### Local Codex Usage Logs
+
+Token Tamagotchi may read local Codex SQLite state, such as `logs_2.sqlite` and `state_5.sqlite`, to estimate usage without making network requests or spending tokens.
+
+This source can provide:
+
+- Recent request token usage, such as `response.usage.total_tokens`.
+- Recent 5-hour usage by summing local usage events inside the rolling window.
+- Total local usage signals, such as thread-level `tokens_used`.
+- Reset timing when Codex logs include local `rate_limits.*.reset_at` values.
+
+This source does not guarantee exact remaining quota by itself. It is useful for diagnostics, trend history, and fallback usage displays, but the default remaining meters should use the official app-server rate-limit percentages.
+
+User-entered quota limits are not a primary product path because users generally do not know their true quota size. They may exist only as an advanced debugging override. The default experience must prioritize automatically discovered usage, reset, limit, and remaining signals.
+
 ### Manual Provider
 
-User-entered structured quota values, such as 5-hour remaining quota, total remaining quota, and reset timing.
-
-### User-Provided Codex CLI Output
-
-The primary real-world MVP input is text pasted or imported by the user from official Codex CLI/status output, such as `codex status` or `codex usage`.
-
-The app treats this as raw text and passes it through `crates/codex-adapter`. The parser extracts quota fields and returns a normalized `QuotaSnapshot`.
+User-entered structured quota values or pasted Codex text are compatibility/debug inputs. They are useful while building parsers and fixtures, but they are not the default product experience.
 
 ## Local App Sources
 
@@ -50,14 +72,15 @@ Future providers can be added without changing the UI model if they implement th
 - Claude Code CLI adapter.
 - User-exported JSON import.
 
-Future import flows must not scrape browsers, capture sessions, read credentials, or send quota data to remote services.
+Future import flows must not scrape browsers, capture sessions, read credentials, proxy HTTPS traffic, or send quota data to remote services by default.
 
 ## Source Matrix
 
 | Source | Acquisition | Shape | Default Storage |
 | --- | --- | --- | --- |
 | Mock provider | App generated | `QuotaSnapshot` | Not persisted unless debugging |
-| Manual provider | Settings/input UI | Structured fields | SQLite snapshot |
-| Codex CLI output | User paste/import | Raw text | Parsed snapshot; raw text opt-in |
+| Codex app-server rate limits | Local `codex app-server --stdio` read-only method | Official usage percentages | Parsed snapshot |
+| Local Codex logs | Local SQLite read-only | Usage counters/reset hints | Diagnostics/fallback |
+| Manual provider | Settings/input UI | Structured fields/raw text | SQLite snapshot |
 | Local state | App generated | Structs | SQLite |
 | User settings | Settings UI | Key-value | Local storage or SQLite |
