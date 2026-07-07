@@ -6,7 +6,8 @@ Token Tamagotchi should evolve naturally:
 v0.1 = Monitor
 v0.2 = Desktop Companion
 v0.3 = Living Entity
-v0.4 = Predict / Assist
+v0.4 = Release Engineering
+v0.5 = Predict / Assist
 ```
 
 ## v0.1: Monitor
@@ -61,22 +62,50 @@ Deferred from v0.2:
 
 Goal: evolve the companion into an animated desktop entity while keeping quota logic local and testable.
 
-- True desktop-entity presentation with no obvious rectangular window surface.
-- Better drag/positioning behavior for a companion that lives on the desktop.
+Current v0.3 experience:
+
+- Industrial Bit companion visual direction.
+- Compact 5H status HUD.
+- Full-body companion mode when expanded.
+- Quota-adaptive 5H token food and 7D reserve colors.
+- Token-eating feedback when 5-hour quota decreases.
+- Reset celebration when quota refills.
+- Debug tools hidden by default unless explicitly enabled for local development.
+- Light/dark desktop readability pass.
+- Performance pass for mostly idle rendering.
+
+Deferred v0.3+ work:
+
+- Better drag-time lightweight mode.
+- System tray/menu bar status.
+- Settings UI for debug tools, startup behavior, and window behavior.
 - Skin manifest support and first alternate skin.
 - Provider contract stabilization.
 - Additional CLI adapters, such as Claude or OpenRouter, if they fit the same local-first model.
 - Optional user-exported JSON import.
-- Low-poly, voxel, Canvas, Three.js, or React Three Fiber rendering exploration.
-- Mouse-aware reactions and quota-reactive motion.
+- Canvas, Three.js, or React Three Fiber rendering exploration.
+- Mouse-aware reactions and richer quota-reactive motion.
 
-## v0.4: Predict / Assist
+## v0.4: Release Engineering
+
+Goal: make the current companion installable, understandable, and safe to run as a daily desktop tool.
+
+- Package and validate Windows installer builds.
+- Validate macOS and Linux build paths.
+- Add a first-run onboarding path that explains local Codex access and privacy boundaries.
+- Add startup behavior settings, including launch on login and companion visibility preferences.
+- Add a lightweight system tray/menu bar control surface for show, hide, refresh, and quit.
+- Add settings for debug tools so production users never see test controls by accident.
+- Stabilize window behavior around screen bounds, edge cases, and multi-monitor setups.
+- Keep performance budgets explicit for idle, dragging, expanded panel, and details panel states.
+- Prepare release notes, screenshots, and install instructions.
+
+## v0.5: Predict / Assist
 
 Goal: offer lightweight guidance without compromising privacy.
 
 - Estimates for remaining PR reviews, coding time, or task capacity.
 - Answers to questions like "Can I still run this task?" or "Can I keep coding for another 2 hours?"
 - Prompt splitting and model-choice suggestions.
-- Cross-platform packaging validation for macOS and Linux.
 
-AI-assisted guidance belongs after the monitor and desktop companion foundations, not v0.1. The first version should stay focused on being a clear quota monitor.
+AI-assisted guidance belongs after the monitor, desktop companion, and release foundations. The first public release should stay focused on being a clear quota monitor with a polished companion experience.

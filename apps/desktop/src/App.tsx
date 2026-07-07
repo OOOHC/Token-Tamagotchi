@@ -3,7 +3,6 @@ import { invoke } from "@tauri-apps/api/core";
 import type { PointerEvent } from "react";
 import { Companion } from "./components/Pet";
 import { Progress } from "./components/Progress";
-import { Bubble } from "./components/Bubble";
 import { StatusImport } from "./components/StatusImport";
 import { ParseDiagnostics } from "./components/ParseDiagnostics";
 import { SourceStatus, type CodexSourceStatus } from "./components/SourceStatus";
@@ -12,32 +11,68 @@ import { RateLimitPanel, type CodexRateLimitSnapshot } from "./components/RateLi
 import { WindowControls } from "./components/WindowControls";
 import { useQuota } from "./hooks/useQuota";
 import { useMood } from "./hooks/useMood";
-import type { QuotaSnapshot } from "./store/quotaStore";
+import type { Mood, QuotaSnapshot } from "./store/quotaStore";
 
 type WindowLayoutState = {
   panelAbove: boolean;
+  dockEdge: "left" | "right" | null;
 };
+
+type BitActivity = "idle" | "scan" | "type" | "snack";
+type ViteImportMeta = ImportMeta & {
+  env?: {
+    VITE_SHOW_DEBUG_TOOLS?: string;
+  };
+};
+
+const LAST_CELEBRATED_RESET_KEY = "token-tamagotchi:last-celebrated-five-hour-reset";
+const AUTO_FOLD_BODY_MODE = false;
+const VITE_ENV = (import.meta as ViteImportMeta).env;
+const SHOW_DEBUG_TOOLS = VITE_ENV?.VITE_SHOW_DEBUG_TOOLS === "true";
+const MOOD_TEST_CASES = [
+  { label: "Happy", percent: 95 },
+  { label: "Relaxed", percent: 65 },
+  { label: "Concerned", percent: 30 },
+  { label: "Panicking", percent: 12 },
+  { label: "Exhausted", percent: 3 },
+  { label: "Unknown", percent: null }
+] as const;
 
 export function App() {
   const { snapshot, setSnapshot } = useQuota();
-  const mood = useMood(snapshot);
+  const baseMood = useMood(snapshot);
+  const [celebrationMood, setCelebrationMood] = useState<Mood | null>(null);
+  const mood = celebrationMood ?? baseMood;
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isCompanionActive, setIsCompanionActive] = useState(false);
-  const [isFoodToggleVisible, setIsFoodToggleVisible] = useState(false);
   const [isQuickStatsVisible, setIsQuickStatsVisible] = useState(false);
+  const [isBodyMode, setIsBodyMode] = useState(false);
   const [bubbleNonce, setBubbleNonce] = useState(0);
   const [isBubbleVisible, setIsBubbleVisible] = useState(false);
+  const [isFeeding, setIsFeeding] = useState(false);
+  const [feedAnimationKey, setFeedAnimationKey] = useState(0);
+  const [tokenMealPercent, setTokenMealPercent] = useState<number | null>(null);
   const [sourceStatus, setSourceStatus] = useState<CodexSourceStatus | null>(null);
   const [localUsage, setLocalUsage] = useState<LocalCodexUsageSnapshot | null>(null);
   const [rateLimits, setRateLimits] = useState<CodexRateLimitSnapshot | null>(null);
   const [rateLimitStatus, setRateLimitStatus] = useState<"checking" | "synced" | "offline">("checking");
   const [rateLimitError, setRateLimitError] = useState<string | null>(null);
   const [isPanelAbove, setIsPanelAbove] = useState(false);
+  const [dockEdge, setDockEdge] = useState<"left" | "right" | null>(null);
   const dragStartRef = useRef<{ x: number; y: number } | null>(null);
   const dragClampTimersRef = useRef<number[]>([]);
-  const windowLayout = isDetailsOpen ? "details" : isQuickStatsVisible ? "food" : isBubbleVisible || isFoodToggleVisible ? "peek" : "compact";
+  const nativeDragInFlightRef = useRef(false);
+  const ignoreNextClickRef = useRef(false);
+  const celebrationTimeoutRef = useRef<number | null>(null);
+  const lastBodyToggleAtRef = useRef(0);
+  const windowLayout = isDetailsOpen ? "details" : isQuickStatsVisible ? "food" : isBodyMode || isBubbleVisible ? "body" : "compact";
   const previousWindowLayoutRef = useRef(windowLayout);
   const previousPanelAboveRef = useRef(isPanelAbove);
+  const previousMoodRef = useRef(mood);
+  const previousBaseMoodRef = useRef(baseMood);
+  const previousFiveHourPercentRef = useRef<number | null>(null);
+  const previousFiveHourUsedTokensRef = useRef<number | null>(null);
+  const feedingTimeoutRef = useRef<number | null>(null);
 
   const refreshRateLimits = useCallback(() => {
     setRateLimitStatus("checking");
@@ -149,13 +184,55 @@ export function App() {
 
     const timeout = window.setTimeout(() => {
       setIsBubbleVisible(false);
-      if (!isQuickStatsVisible) {
-        setIsFoodToggleVisible(false);
-      }
     }, 3_200);
 
     return () => window.clearTimeout(timeout);
-  }, [bubbleNonce, isBubbleVisible, isQuickStatsVisible]);
+  }, [bubbleNonce, isBubbleVisible]);
+
+  useEffect(() => {
+    if (previousMoodRef.current === mood) {
+      return;
+    }
+
+    previousMoodRef.current = mood;
+    setIsBubbleVisible(true);
+    setBubbleNonce((value) => value + 1);
+  }, [mood]);
+
+  useEffect(() => {
+    const previousMood = previousBaseMoodRef.current;
+    previousBaseMoodRef.current = baseMood;
+
+    const recoveredFromPressure =
+      (previousMood === "panicking" || previousMood === "exhausted") &&
+      (baseMood === "relaxed" || baseMood === "happy");
+
+    if (!recoveredFromPressure) {
+      return;
+    }
+
+    triggerCelebration();
+  }, [baseMood]);
+
+  useEffect(() => {
+    if (!rateLimits?.available || rateLimits.fiveHourRemainingPercent === null || rateLimits.fiveHourRemainingPercent < 100) {
+      return;
+    }
+
+    const resetKey = rateLimits.fiveHourResetAt ?? `observed:${rateLimits.observedAt}`;
+
+    try {
+      if (window.localStorage.getItem(LAST_CELEBRATED_RESET_KEY) === resetKey) {
+        return;
+      }
+
+      window.localStorage.setItem(LAST_CELEBRATED_RESET_KEY, resetKey);
+    } catch (error) {
+      console.warn("Failed to persist reset celebration marker", error);
+    }
+
+    triggerCelebration();
+  }, [rateLimits]);
 
   useEffect(() => {
     const previousLayout = previousWindowLayoutRef.current;
@@ -168,6 +245,7 @@ export function App() {
     })
       .then((state) => {
         setIsPanelAbove(state.panelAbove);
+        setDockEdge(state.dockEdge);
         previousWindowLayoutRef.current = windowLayout;
         previousPanelAboveRef.current = state.panelAbove;
       })
@@ -179,26 +257,122 @@ export function App() {
   useEffect(() => {
     return () => {
       clearDragClampTimers();
+      clearCelebrationTimer();
+      clearFeedingTimer();
     };
   }, []);
 
+  useEffect(() => {
+    if (!AUTO_FOLD_BODY_MODE || !isBodyMode || isQuickStatsVisible) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setIsBodyMode(false);
+    }, 90_000);
+
+    return () => window.clearTimeout(timeout);
+  }, [isBodyMode, isQuickStatsVisible]);
+
+  function triggerCelebration() {
+    clearCelebrationTimer();
+    setCelebrationMood("celebrating");
+    setIsBubbleVisible(true);
+    setBubbleNonce((value) => value + 1);
+
+    celebrationTimeoutRef.current = window.setTimeout(() => {
+      setCelebrationMood(null);
+      celebrationTimeoutRef.current = null;
+    }, 2_800);
+  }
+
+  function triggerTokenMeal(deltaPercent: number) {
+    clearFeedingTimer();
+    setIsFeeding(false);
+    setFeedAnimationKey((value) => value + 1);
+    setTokenMealPercent(deltaPercent);
+    setIsBubbleVisible(true);
+    setBubbleNonce((value) => value + 1);
+
+    window.requestAnimationFrame(() => {
+      setIsFeeding(true);
+    });
+
+    feedingTimeoutRef.current = window.setTimeout(() => {
+      setIsFeeding(false);
+      setTokenMealPercent(null);
+      feedingTimeoutRef.current = null;
+    }, 2_200);
+  }
+
+  function clearFeedingTimer() {
+    if (feedingTimeoutRef.current === null) {
+      return;
+    }
+
+    window.clearTimeout(feedingTimeoutRef.current);
+    feedingTimeoutRef.current = null;
+  }
+
+  function clearCelebrationTimer() {
+    if (celebrationTimeoutRef.current === null) {
+      return;
+    }
+
+    window.clearTimeout(celebrationTimeoutRef.current);
+    celebrationTimeoutRef.current = null;
+  }
+
   function interactWithCompanion() {
+    if (ignoreNextClickRef.current) {
+      ignoreNextClickRef.current = false;
+      return;
+    }
+
+    const now = window.performance.now();
+    const shouldToggleBody = !isQuickStatsVisible && now - lastBodyToggleAtRef.current > 300;
+
+    if (shouldToggleBody) {
+      lastBodyToggleAtRef.current = now;
+      setIsBodyMode((value) => !value);
+    }
+
+    if (dockEdge !== null) {
+      setDockEdge(null);
+    }
+
     setIsCompanionActive(true);
-    setIsFoodToggleVisible(true);
     setIsBubbleVisible(true);
     setBubbleNonce((value) => value + 1);
     window.setTimeout(() => setIsCompanionActive(false), 420);
   }
 
   function toggleFoodMeters() {
+    if (ignoreNextClickRef.current) {
+      ignoreNextClickRef.current = false;
+      return;
+    }
+
+    setDockEdge(null);
     setIsQuickStatsVisible((value) => {
       if (value) {
         setIsDetailsOpen(false);
-        setIsFoodToggleVisible(false);
+        setIsBodyMode(true);
+        setIsBubbleVisible(true);
+        setBubbleNonce((current) => current + 1);
+      } else {
+        setIsBodyMode(false);
       }
 
       return !value;
     });
+  }
+
+  function applyMoodTest(percent: number | null) {
+    setSnapshot(createMoodTestSnapshot(percent));
+    setIsBodyMode(true);
+    setIsQuickStatsVisible(true);
+    setIsDetailsOpen(true);
   }
 
   function startPossibleWindowDrag(event: PointerEvent<HTMLElement>) {
@@ -212,7 +386,7 @@ export function App() {
   function continuePossibleWindowDrag(event: PointerEvent<HTMLElement>) {
     const start = dragStartRef.current;
 
-    if (!start) {
+    if (!start || nativeDragInFlightRef.current) {
       return;
     }
 
@@ -224,23 +398,49 @@ export function App() {
     }
 
     dragStartRef.current = null;
-    void invoke("start_window_drag").catch((error) => {
-      console.error("Failed to start window drag", error);
-    });
-    scheduleWindowConstraint([120, 360, 900, 1_600, 2_800, 4_200]);
+    ignoreNextClickRef.current = true;
+    window.setTimeout(() => {
+      ignoreNextClickRef.current = false;
+    }, 450);
+    clearDragClampTimers();
+    nativeDragInFlightRef.current = true;
+    void invoke("start_window_drag")
+      .catch((error) => {
+        console.error("Failed to start window drag", error);
+      })
+      .finally(() => {
+        nativeDragInFlightRef.current = false;
+        scheduleWindowConstraint([0, 180]);
+      });
   }
 
   function stopPossibleWindowDrag() {
     dragStartRef.current = null;
-    scheduleWindowConstraint([0, 160]);
+
+    if (nativeDragInFlightRef.current) {
+      return;
+    }
+
+    scheduleWindowConstraint([120]);
+  }
+
+  function cancelPossibleWindowDrag() {
+    dragStartRef.current = null;
+
+    if (!nativeDragInFlightRef.current) {
+      scheduleWindowConstraint([120]);
+    }
   }
 
   function scheduleWindowConstraint(delays: number[]) {
+    clearDragClampTimers();
+
     for (const delay of delays) {
       const timer = window.setTimeout(() => {
-        void invoke<WindowLayoutState>("constrain_window_to_screen")
+        void invoke<WindowLayoutState>("constrain_window_to_screen", { layout: windowLayout })
           .then((state) => {
             setIsPanelAbove(state.panelAbove);
+            setDockEdge(state.dockEdge);
             previousPanelAboveRef.current = state.panelAbove;
           })
           .catch((error) => {
@@ -260,8 +460,51 @@ export function App() {
     dragClampTimersRef.current = [];
   }
 
-  const remainingPercent = rateLimits?.fiveHourRemainingPercent ?? snapshot.fiveHourRemaining;
-  const alert = quotaAlertFor(remainingPercent);
+  const fiveHourRemainingPercent =
+    rateLimits?.fiveHourRemainingPercent ?? percentageFromSnapshot(snapshot.fiveHourRemaining, snapshot.fiveHourLimit);
+
+  useEffect(() => {
+    const previousPercent = previousFiveHourPercentRef.current;
+    previousFiveHourPercentRef.current = fiveHourRemainingPercent;
+
+    if (previousPercent === null || fiveHourRemainingPercent === null) {
+      return;
+    }
+
+    const consumedPercent = Math.round(previousPercent - fiveHourRemainingPercent);
+
+    if (consumedPercent <= 0) {
+      return;
+    }
+
+    triggerTokenMeal(consumedPercent);
+  }, [fiveHourRemainingPercent]);
+
+  useEffect(() => {
+    if (!localUsage?.available) {
+      return;
+    }
+
+    const currentUsedTokens = localUsage.fiveHourUsed;
+    const previousUsedTokens = previousFiveHourUsedTokensRef.current;
+    previousFiveHourUsedTokensRef.current = currentUsedTokens;
+
+    if (previousUsedTokens === null) {
+      return;
+    }
+
+    const consumedTokens = currentUsedTokens - previousUsedTokens;
+
+    if (consumedTokens <= 0) {
+      return;
+    }
+
+    triggerTokenMeal(1);
+  }, [localUsage]);
+
+  const alert = quotaAlertFor(fiveHourRemainingPercent);
+  const isBodyVisible = windowLayout !== "compact";
+  const bitActivity: BitActivity = isFeeding ? "snack" : "idle";
   const companion = (
     <section
       className="companion-stage"
@@ -269,26 +512,25 @@ export function App() {
       onPointerDown={startPossibleWindowDrag}
       onPointerMove={continuePossibleWindowDrag}
       onPointerUp={stopPossibleWindowDrag}
-      onPointerCancel={stopPossibleWindowDrag}
+      onPointerCancel={cancelPossibleWindowDrag}
     >
       <div className="companion-idle-cluster">
-        <Companion mood={mood} isActive={isCompanionActive} onInteract={interactWithCompanion} />
-        {isFoodToggleVisible ? (
-          <button
-            className="food-toggle-button"
-            type="button"
-            aria-label={isQuickStatsVisible ? "Hide quota food meters" : "Show quota food meters"}
-            aria-expanded={isQuickStatsVisible}
-            onPointerDown={(event) => event.stopPropagation()}
-            onClick={toggleFoodMeters}
-          >
-            {isQuickStatsVisible ? "-" : "+"}
-          </button>
-        ) : null}
+        <Companion
+          mood={mood}
+          isActive={isCompanionActive}
+          activity={mood === "panicking" || mood === "exhausted" ? "idle" : bitActivity}
+          isFeeding={isFeeding}
+          feedAnimationKey={feedAnimationKey}
+          isStatusVisible={isBubbleVisible}
+          isStatusExpanded={isQuickStatsVisible}
+          statusMessage={statusMessageFor(fiveHourRemainingPercent, tokenMealPercent)}
+          onInteract={interactWithCompanion}
+          onStatusClick={toggleFoodMeters}
+        />
       </div>
     </section>
   );
-  const companionInfo = isBubbleVisible || isQuickStatsVisible ? (
+  const companionInfo = isQuickStatsVisible ? (
     <section className="companion-panel" aria-label="Companion status panel">
       {isQuickStatsVisible ? (
         <div className="companion-panel-header">
@@ -296,7 +538,6 @@ export function App() {
           <WindowControls variant="mini" />
         </div>
       ) : null}
-      {isBubbleVisible ? <Bubble key={bubbleNonce} mood={mood} /> : null}
       {isQuickStatsVisible && alert ? (
         <section className={`quota-alert quota-alert-${alert.level}`} aria-label="Quota alert">
           <span>{alert.status}</span>
@@ -306,8 +547,8 @@ export function App() {
       {isQuickStatsVisible ? (
         <>
           <section className="quota-panel" aria-label="Quota status">
-            <Progress label="5h food" value={snapshot.fiveHourRemaining} max={snapshot.fiveHourLimit} prominence="primary" />
-            <Progress label="7d food" value={snapshot.totalRemaining} max={snapshot.totalLimit} />
+            <Progress label="5h token food" value={snapshot.fiveHourRemaining} max={snapshot.fiveHourLimit} prominence="primary" />
+            <Progress label="7d reserve" value={snapshot.totalRemaining} max={snapshot.totalLimit} />
           </section>
           <section className="utility-panel" aria-label="Companion controls">
             <button
@@ -334,15 +575,56 @@ export function App() {
                   refreshStatus={rateLimitStatus}
                   refreshError={rateLimitError}
                 />
-                <details className="debug-section">
-                  <summary>[Debug]</summary>
-                  <div className="debug-section-body">
-                    <SourceStatus status={sourceStatus} />
-                    <AutoUsagePanel usage={localUsage} />
-                    <StatusImport onParsed={setSnapshot} />
-                    <ParseDiagnostics snapshot={snapshot} />
-                  </div>
-                </details>
+                {SHOW_DEBUG_TOOLS ? (
+                  <details className="debug-section">
+                    <summary>[Debug]</summary>
+                    <div className="debug-section-body">
+                      <section className="mood-test-panel" aria-label="Mood test controls">
+                        <div className="mood-test-header">
+                          <span>[Mood Test]</span>
+                          <span>dev only</span>
+                        </div>
+                        <div className="mood-test-grid">
+                          {MOOD_TEST_CASES.map((testCase) => (
+                            <button
+                              key={testCase.label}
+                              className="mood-test-button"
+                              type="button"
+                              onClick={() => applyMoodTest(testCase.percent)}
+                            >
+                              {testCase.label}
+                            </button>
+                          ))}
+                          <button
+                            className="mood-test-button mood-test-button-celebrate"
+                            type="button"
+                            onClick={() => {
+                              applyMoodTest(100);
+                              triggerCelebration();
+                            }}
+                          >
+                            Celebrating
+                          </button>
+                          <button
+                            className="mood-test-button mood-test-button-feed"
+                            type="button"
+                            onClick={() => {
+                              setIsBodyMode(true);
+                              setIsQuickStatsVisible(true);
+                              triggerTokenMeal(3);
+                            }}
+                          >
+                            Feed Token
+                          </button>
+                        </div>
+                      </section>
+                      <SourceStatus status={sourceStatus} />
+                      <AutoUsagePanel usage={localUsage} />
+                      <StatusImport onParsed={setSnapshot} />
+                      <ParseDiagnostics snapshot={snapshot} />
+                    </div>
+                  </details>
+                ) : null}
               </div>
             ) : null}
           </section>
@@ -352,7 +634,7 @@ export function App() {
   ) : null;
 
   return (
-    <main className={`app-shell app-shell-${windowLayout} ${isDetailsOpen ? "app-shell-expanded" : "app-shell-compact"} ${isPanelAbove ? "app-shell-panel-above" : "app-shell-panel-below"}`}>
+    <main className={`app-shell app-shell-${windowLayout} ${isBodyVisible ? "app-shell-pose-body" : "app-shell-pose-head"} ${isDetailsOpen ? "app-shell-expanded" : "app-shell-compact"} ${dockEdge ? `app-shell-docked-${dockEdge}` : ""} ${isPanelAbove ? "app-shell-panel-above" : "app-shell-panel-below"}`}>
       {isPanelAbove ? companionInfo : null}
       {companion}
       {isPanelAbove ? null : companionInfo}
@@ -382,6 +664,43 @@ function quotaAlertFor(remainingPercent: number | null) {
   }
 
   return null;
+}
+
+function percentageFromSnapshot(remaining: number | null, limit: number | null) {
+  if (remaining === null || limit === null || limit <= 0) {
+    return null;
+  }
+
+  return Math.max(0, Math.min(100, (remaining / limit) * 100));
+}
+
+function statusMessageFor(remainingPercent: number | null, tokenMealPercent: number | null) {
+  if (tokenMealPercent !== null) {
+    return "nom nom...";
+  }
+
+  if (remainingPercent === null) {
+    return "5H --%";
+  }
+
+  return `5H ${Math.round(remainingPercent)}%`;
+}
+
+function createMoodTestSnapshot(percent: number | null): QuotaSnapshot {
+  const limit = percent === null ? null : 100;
+
+  return {
+    fiveHourRemaining: percent,
+    fiveHourLimit: limit,
+    totalRemaining: percent,
+    totalLimit: limit,
+    resetAt: percent === null ? null : new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+    source: "mock",
+    confidence: percent === null ? "low" : "high",
+    parsedAt: new Date().toISOString(),
+    rawInputSha256: null,
+    parserWarnings: percent === null ? ["Mood test: missing quota fields."] : [`Mood test: forced ${percent}% 5h quota.`]
+  };
 }
 
 function snapshotFromRateLimits(rateLimits: CodexRateLimitSnapshot): QuotaSnapshot {

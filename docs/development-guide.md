@@ -12,18 +12,43 @@ Run all commands from the repository root.
 
 ```bash
 npm install
-cargo build
 ```
 
-For a fast first check, these are the only commands a new contributor needs before reading deeper docs.
+This installs the desktop workspace dependencies.
 
 ## Development
 
 ```bash
-npm run dev
+npm run tauri -- dev
 ```
 
-This runs the desktop development flow through the root workspace scripts.
+This launches the Tauri desktop app with the local React/Vite frontend.
+
+For a production-style build check:
+
+```bash
+npm run build
+cargo build
+```
+
+## Debug Tools
+
+The Details panel contains developer-only controls for mood tests, token-feed animation tests, manual import, source checks, and parser diagnostics.
+
+These controls are hidden by default in both development and production builds. Enable developer mode explicitly when you need to test moods, token eating, parser behavior, or source diagnostics:
+
+```bash
+VITE_SHOW_DEBUG_TOOLS=true
+```
+
+PowerShell example:
+
+```powershell
+$env:VITE_SHOW_DEBUG_TOOLS = "true"
+npm run tauri -- dev
+```
+
+Use a normal `npm run build` without this environment variable for the production-ready version.
 
 ## Testing
 

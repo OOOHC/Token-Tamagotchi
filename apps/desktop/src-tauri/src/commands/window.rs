@@ -3,11 +3,16 @@ use tauri::{PhysicalPosition, PhysicalSize, Position, Size};
 
 const SCREEN_MARGIN: i32 = 8;
 const BOTTOM_RESERVED_SPACE: i32 = 56;
+const BIT_VISIBLE_LEFT: i32 = 112;
+const BIT_VISIBLE_RIGHT: i32 = 190;
+const BIT_VISIBLE_TOP: i32 = 112;
+const BIT_VISIBLE_BOTTOM: i32 = 96;
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct WindowLayoutState {
     pub panel_above: bool,
+    pub dock_edge: Option<String>,
 }
 
 #[tauri::command]
@@ -49,16 +54,25 @@ pub fn set_window_layout(
             y: companion_screen_position.y - new_anchor.y,
         }))
         .map_err(|error| error.to_string())?;
-    constrain_window_to_monitor(&window)?;
+    let dock_edge = constrain_window_to_monitor(&window, layout.as_str(), panel_above)?;
 
-    Ok(WindowLayoutState { panel_above })
+    Ok(WindowLayoutState {
+        panel_above,
+        dock_edge,
+    })
 }
 
 #[tauri::command]
-pub fn constrain_window_to_screen(window: tauri::Window) -> Result<WindowLayoutState, String> {
-    constrain_window_to_monitor(&window)?;
+pub fn constrain_window_to_screen(
+    window: tauri::Window,
+    layout: Option<String>,
+) -> Result<WindowLayoutState, String> {
+    let layout = layout.unwrap_or_else(|| "compact".to_string());
+    let panel_above = should_place_panel_above(&window, layout.as_str())?;
+    let dock_edge = constrain_window_to_monitor(&window, layout.as_str(), panel_above)?;
     Ok(WindowLayoutState {
-        panel_above: should_place_panel_above(&window, "current")?,
+        panel_above,
+        dock_edge,
     })
 }
 
@@ -72,12 +86,16 @@ pub fn close_window(window: tauri::Window) -> Result<(), String> {
     window.close().map_err(|error| error.to_string())
 }
 
-fn constrain_window_to_monitor(window: &tauri::Window) -> Result<(), String> {
+fn constrain_window_to_monitor(
+    window: &tauri::Window,
+    layout: &str,
+    panel_above: bool,
+) -> Result<Option<String>, String> {
     let Some(monitor) = window
         .current_monitor()
         .map_err(|error| error.to_string())?
     else {
-        return Ok(());
+        return Ok(None);
     };
 
     let monitor_position = monitor.position();
@@ -85,19 +103,47 @@ fn constrain_window_to_monitor(window: &tauri::Window) -> Result<(), String> {
     let window_position = window.outer_position().map_err(|error| error.to_string())?;
     let window_size = window.outer_size().map_err(|error| error.to_string())?;
 
-    let min_x = monitor_position.x + SCREEN_MARGIN;
-    let min_y = monitor_position.y + SCREEN_MARGIN;
-    let max_x =
+    let window_min_x = monitor_position.x + SCREEN_MARGIN;
+    let window_min_y = monitor_position.y + SCREEN_MARGIN;
+    let window_max_x =
         monitor_position.x + monitor_size.width as i32 - window_size.width as i32 - SCREEN_MARGIN;
-    let max_y = monitor_position.y + monitor_size.height as i32
+    let window_max_y = monitor_position.y + monitor_size.height as i32
         - window_size.height as i32
         - BOTTOM_RESERVED_SPACE;
+    let anchor = companion_anchor(layout, panel_above, window_size.width, window_size.height);
+    let visible_min_x = monitor_position.x + SCREEN_MARGIN - anchor.x + BIT_VISIBLE_LEFT;
+    let visible_max_x = monitor_position.x + monitor_size.width as i32
+        - SCREEN_MARGIN
+        - anchor.x
+        - BIT_VISIBLE_RIGHT;
+    let visible_min_y = monitor_position.y + SCREEN_MARGIN - anchor.y + BIT_VISIBLE_TOP;
+    let visible_max_y = monitor_position.y + monitor_size.height as i32
+        - BOTTOM_RESERVED_SPACE
+        - anchor.y
+        - BIT_VISIBLE_BOTTOM;
 
-    let clamped_x = window_position.x.clamp(min_x, max_x.max(min_x));
+    let min_x = window_min_x.max(visible_min_x);
+    let max_x = window_max_x.min(visible_max_x);
+    let min_y = window_min_y.max(visible_min_y);
+    let max_y = window_max_y.min(visible_max_y);
+
+    let mut dock_edge = None;
+    let mut clamped_x = window_position.x.clamp(min_x, max_x.max(min_x));
     let clamped_y = window_position.y.clamp(min_y, max_y.max(min_y));
 
+    if layout == "compact" {
+        if window_position.x <= min_x + 18 {
+            clamped_x = monitor_position.x - 80;
+            dock_edge = Some("left".to_string());
+        } else if window_position.x >= max_x - 18 {
+            clamped_x =
+                monitor_position.x + monitor_size.width as i32 - window_size.width as i32 + 80;
+            dock_edge = Some("right".to_string());
+        }
+    }
+
     if clamped_x == window_position.x && clamped_y == window_position.y {
-        return Ok(());
+        return Ok(dock_edge);
     }
 
     window
@@ -105,7 +151,9 @@ fn constrain_window_to_monitor(window: &tauri::Window) -> Result<(), String> {
             x: clamped_x,
             y: clamped_y,
         }))
-        .map_err(|error| error.to_string())
+        .map_err(|error| error.to_string())?;
+
+    Ok(dock_edge)
 }
 
 fn should_place_panel_above(window: &tauri::Window, layout: &str) -> Result<bool, String> {
@@ -133,20 +181,20 @@ fn should_place_panel_above(window: &tauri::Window, layout: &str) -> Result<bool
 fn layout_size(layout: &str) -> Result<PhysicalSize<u32>, String> {
     match layout {
         "compact" => Ok(PhysicalSize {
-            width: 150,
-            height: 120,
+            width: 320,
+            height: 300,
         }),
-        "peek" => Ok(PhysicalSize {
-            width: 360,
-            height: 280,
+        "body" => Ok(PhysicalSize {
+            width: 320,
+            height: 390,
         }),
         "food" => Ok(PhysicalSize {
-            width: 360,
-            height: 520,
+            width: 390,
+            height: 640,
         }),
         "details" => Ok(PhysicalSize {
-            width: 430,
-            height: 760,
+            width: 460,
+            height: 820,
         }),
         _ => Err(format!("unknown window layout: {layout}")),
     }
@@ -160,12 +208,20 @@ fn companion_anchor(
 ) -> PhysicalPosition<i32> {
     let x = window_width as i32 / 2;
 
-    if layout == "compact" || !panel_above {
-        return PhysicalPosition { x, y: 58 };
+    if layout == "compact" {
+        return PhysicalPosition { x, y: 150 };
+    }
+
+    if layout == "body" {
+        return PhysicalPosition { x, y: 196 };
+    }
+
+    if !panel_above {
+        return PhysicalPosition { x, y: 108 };
     }
 
     PhysicalPosition {
         x,
-        y: window_height as i32 - 66,
+        y: window_height as i32 - 104,
     }
 }

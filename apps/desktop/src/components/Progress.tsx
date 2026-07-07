@@ -7,6 +7,7 @@ type ProgressProps = {
 
 export function Progress({ label, value, max, prominence = "secondary" }: ProgressProps) {
   const percent = value !== null && max ? Math.max(0, Math.min(100, (value / max) * 100)) : 0;
+  const level = value === null || max === null || max <= 0 ? "unknown" : quotaLevelFor(percent);
   const text =
     value !== null && max === 100
       ? `${Math.round(percent)}%`
@@ -15,7 +16,7 @@ export function Progress({ label, value, max, prominence = "secondary" }: Progre
         : "Unknown";
 
   return (
-    <div className={`food-meter-row food-meter-${prominence}`}>
+    <div className={`food-meter-row food-meter-${prominence} food-meter-${level}`}>
       <div className="food-meter-header">
         <span>{label}</span>
         <span>{text}</span>
@@ -25,4 +26,24 @@ export function Progress({ label, value, max, prominence = "secondary" }: Progre
       </div>
     </div>
   );
+}
+
+function quotaLevelFor(percent: number) {
+  if (percent > 80) {
+    return "healthy";
+  }
+
+  if (percent > 50) {
+    return "stable";
+  }
+
+  if (percent > 20) {
+    return "concerned";
+  }
+
+  if (percent > 5) {
+    return "panicking";
+  }
+
+  return "exhausted";
 }

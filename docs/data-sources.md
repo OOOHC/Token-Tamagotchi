@@ -42,6 +42,8 @@ Token Tamagotchi derives remaining food meters as `100 - usedPercent`. This sour
 
 Token Tamagotchi may read local Codex SQLite state, such as `logs_2.sqlite` and `state_5.sqlite`, to estimate usage without making network requests or spending tokens.
 
+This source must be opened read-only. It should extract only quota-related counters, reset timestamps, and usage totals. It must not persist prompt text, response text, thread content, project paths, or raw log bodies into Token Tamagotchi storage.
+
 This source can provide:
 
 - Recent request token usage, such as `response.usage.total_tokens`.

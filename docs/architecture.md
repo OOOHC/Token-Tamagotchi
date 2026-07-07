@@ -44,7 +44,8 @@ Manual import and parser fixtures follow the same adapter shape, but they are de
 The current app uses React DOM UI inside a compact Tauri window. Desktop-presence work should remain a presentation-layer concern:
 
 - **v0.2:** Transparent/borderless Tauri windows, always-on-top behavior, draggable companion surface, edge-aware panels, and lightweight 2D animation.
-- **v0.3:** Canvas, Three.js, or React Three Fiber for low-poly or voxel-style real-time rendering, richer idle motion, and stronger desktop-entity behavior.
+- **v0.3:** CSS/DOM-based industrial Bit companion, token-food meters, token-eating feedback, quota mood colors, and production-hidden debug tools.
+- **Future rendering:** Canvas, Three.js, or React Three Fiber can be explored for richer low-poly or voxel-style real-time rendering.
 
 3D rendering must not move quota parsing, mood calculation, or persistence out of `crates/`. The living companion is a richer view of the same normalized `QuotaSnapshot` state.
 

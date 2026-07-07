@@ -483,7 +483,7 @@ body {
   color: #a1a1aa;
   background: rgba(24, 24, 27, 0.64);
   font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
-  font-size: 10px;
+  font-size: 12px;
   text-transform: uppercase;
 }
 
@@ -506,6 +506,56 @@ body {
   display: grid;
   gap: 8px;
   padding: 0 8px 8px;
+}
+
+.mood-test-panel {
+  display: grid;
+  gap: 8px;
+  border: 2px solid #3f3f46;
+  padding: 8px;
+  background: rgba(24, 24, 27, 0.9);
+}
+
+.mood-test-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #e4e4e7;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.mood-test-header span:last-child {
+  color: #a1a1aa;
+  font-size: 10px;
+}
+
+.mood-test-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.mood-test-button {
+  min-height: 32px;
+  border: 2px solid rgba(63, 63, 70, 0.9);
+  background: rgba(9, 9, 11, 0.78);
+  color: #e4e4e7;
+  font: 800 11px/1 "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+
+.mood-test-button:hover {
+  border-color: rgba(134, 239, 172, 0.9);
+  color: #bbf7d0;
+}
+
+.mood-test-button-celebrate,
+.mood-test-button-feed {
+  grid-column: 1 / -1;
 }
 
 .source-status {
@@ -790,4 +840,3188 @@ body {
 .food-meter-fill {
   height: 100%;
   background: #facc15;
+}
+
+/* v0.3 Bit prototype: CSS voxel desktop companion. */
+.companion-stage {
+  min-height: 222px;
+}
+
+.companion-idle-cluster {
+  min-width: 238px;
+  min-height: 218px;
+}
+
+.bit {
+  --bit-glow: #67ff8f;
+  --bit-main: #245c38;
+  --bit-main-bright: #4ade80;
+  --bit-panel: #0b1711;
+  --bit-edge: #1f2937;
+  --bit-trim: #9fd86f;
+  --bit-screen: #07110c;
+  position: relative;
+  width: 226px;
+  height: 214px;
+  margin: 0 auto;
+  border: 0;
+  padding: 0;
+  overflow: visible;
+  color: var(--bit-glow);
+  background: transparent;
+  image-rendering: pixelated;
+  cursor: grab;
+  animation: bit-hover 3.4s ease-in-out infinite;
+  transform-origin: 50% 82%;
+  appearance: none;
+  font: inherit;
+  -webkit-app-region: no-drag;
+}
+
+.bit:active {
+  cursor: grabbing;
+}
+
+.bit-bot {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  width: 132px;
+  height: 154px;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 12px 10px rgba(0, 0, 0, 0.36));
+  z-index: 2;
+}
+
+.bit-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  width: 130px;
+  height: 22px;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0));
+  transform: translateX(-50%);
+  animation: bit-shadow 3.4s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.bit-aura {
+  position: absolute;
+  left: 50%;
+  top: 26px;
+  width: 150px;
+  height: 142px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--bit-glow) 26%, transparent), transparent 66%);
+  opacity: 0.62;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.bit-head {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  width: 92px;
+  height: 72px;
+  border: 4px solid #2f3b35;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 34%),
+    linear-gradient(180deg, #343b36, #151d18 72%);
+  box-shadow:
+    inset 0 -6px 0 rgba(0, 0, 0, 0.42),
+    inset 7px 0 0 rgba(255, 255, 255, 0.06),
+    9px 8px 0 rgba(0, 0, 0, 0.18),
+    0 0 18px color-mix(in srgb, var(--bit-glow) 34%, transparent);
+  transform: translateX(-50%) skewY(-3deg);
+  z-index: 4;
+}
+
+.bit-head::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  top: -16px;
+  height: 9px;
+  border: 3px solid #2f3b35;
+  border-bottom: 0;
+  background: #404842;
+  box-shadow:
+    5px -7px 0 #2d352f,
+    11px -12px 0 #1f2622,
+    17px -16px 0 #171d1a;
+}
+
+.bit-head-layer {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.bit-head-layer-top {
+  top: 7px;
+}
+
+.bit-head-layer-mid {
+  top: 14px;
+  opacity: 0.54;
+}
+
+.bit-ear {
+  position: absolute;
+  top: 22px;
+  width: 17px;
+  height: 34px;
+  border: 3px solid #2b342f;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent),
+    var(--bit-main);
+  box-shadow: inset 0 0 10px color-mix(in srgb, var(--bit-glow) 52%, transparent);
+}
+
+.bit-ear-left {
+  left: -20px;
+}
+
+.bit-ear-right {
+  right: -20px;
+}
+
+.bit-screen {
+  position: absolute;
+  left: 13px;
+  right: 13px;
+  top: 25px;
+  height: 36px;
+  border: 3px solid #16211a;
+  background: var(--bit-screen);
+  box-shadow:
+    inset 0 0 13px rgba(0, 0, 0, 0.8),
+    0 0 14px color-mix(in srgb, var(--bit-glow) 36%, transparent);
+}
+
+.bit-eye {
+  position: absolute;
+  top: 9px;
+  width: 10px;
+  height: 13px;
+  background: var(--bit-glow);
+  box-shadow: 0 0 10px var(--bit-glow);
+}
+
+.bit-eye-left {
+  left: 12px;
+}
+
+.bit-eye-right {
+  right: 12px;
+}
+
+.bit-mouth {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  width: 17px;
+  height: 8px;
+  border: 3px solid var(--bit-glow);
+  border-top: 0;
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px var(--bit-glow);
+}
+
+.bit-sleep-text {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: #f6d38c;
+  font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 15px;
+  font-weight: 900;
+  text-shadow: 0 0 9px rgba(246, 211, 140, 0.78);
+}
+
+.bit-neck {
+  position: absolute;
+  left: 50%;
+  top: 75px;
+  width: 30px;
+  height: 12px;
+  background: #18231b;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.bit-body {
+  position: absolute;
+  left: 50%;
+  top: 86px;
+  width: 70px;
+  height: 56px;
+  border: 4px solid #25342b;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 38%),
+    linear-gradient(180deg, var(--bit-main), #152318);
+  box-shadow:
+    inset 0 -7px 0 rgba(0, 0, 0, 0.32),
+    0 0 15px color-mix(in srgb, var(--bit-glow) 24%, transparent);
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.bit-core {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 10px;
+  height: 29px;
+  border: 3px solid #122318;
+  background: color-mix(in srgb, var(--bit-glow) 36%, #123019);
+}
+
+.bit-chest-icon {
+  position: absolute;
+  left: 28px;
+  top: 23px;
+  width: 15px;
+  height: 14px;
+  border: 3px solid #14351d;
+  border-top-width: 5px;
+  background: transparent;
+}
+
+.bit-arm,
+.bit-leg {
+  position: absolute;
+  border: 3px solid #263129;
+  background:
+    linear-gradient(180deg, var(--bit-main), #152219);
+  box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.34);
+  z-index: 2;
+}
+
+.bit-arm {
+  top: 96px;
+  width: 18px;
+  height: 48px;
+}
+
+.bit-arm-left {
+  left: 16px;
+  transform: rotate(14deg);
+}
+
+.bit-arm-right {
+  right: 16px;
+  transform: rotate(-14deg);
+}
+
+.bit-leg {
+  top: 136px;
+  width: 23px;
+  height: 28px;
+}
+
+.bit-leg-left {
+  left: 38px;
+}
+
+.bit-leg-right {
+  right: 38px;
+}
+
+.bit-token-orbit {
+  position: absolute;
+  left: 154px;
+  top: 62px;
+  width: 42px;
+  height: 42px;
+  pointer-events: none;
+  animation: bit-orbit 3.8s linear infinite;
+}
+
+.bit-token {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border: 2px solid color-mix(in srgb, var(--bit-glow) 70%, white);
+  background: color-mix(in srgb, var(--bit-glow) 35%, transparent);
+  box-shadow: 0 0 12px var(--bit-glow);
+}
+
+.bit-code-particles {
+  position: absolute;
+  left: 34px;
+  top: 42px;
+  width: 34px;
+  height: 30px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bit-code-particles span {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: var(--bit-glow);
+  box-shadow: 0 0 8px var(--bit-glow);
+}
+
+.bit-code-particles span:nth-child(1) {
+  left: 2px;
+  top: 8px;
+}
+
+.bit-code-particles span:nth-child(2) {
+  left: 14px;
+  top: 2px;
+}
+
+.bit-code-particles span:nth-child(3) {
+  left: 25px;
+  top: 13px;
+}
+
+.bit-code-particles span:nth-child(4) {
+  left: 11px;
+  top: 22px;
+}
+
+.bit-token-one {
+  left: 14px;
+  top: 0;
+}
+
+.bit-token-two {
+  right: 2px;
+  bottom: 5px;
+  width: 8px;
+  height: 8px;
+  opacity: 0.7;
+}
+
+.bit-happy,
+.bit-relaxed {
+  --bit-glow: #67ff8f;
+  --bit-main: #245c38;
+  --bit-trim: #9fd86f;
+}
+
+.bit-concerned {
+  --bit-glow: #facc15;
+  --bit-main: #5f5320;
+  --bit-trim: #f7d76b;
+  animation: bit-concerned-hover 3.8s ease-in-out infinite;
+}
+
+.bit-panicking {
+  --bit-glow: #fb7185;
+  --bit-main: #6b2635;
+  --bit-trim: #ffa5b1;
+  animation: bit-glitch 0.28s steps(2, end) infinite;
+}
+
+.bit-exhausted {
+  --bit-glow: #f6d38c;
+  --bit-main: #3b4238;
+  --bit-trim: #9ca3af;
+  animation: none;
+}
+
+.bit-unknown {
+  --bit-glow: #a1a1aa;
+  --bit-main: #374151;
+  --bit-trim: #d4d4d8;
+  opacity: 0.88;
+}
+
+.bit-celebrating {
+  --bit-glow: #a78bfa;
+  --bit-main: #3e2f63;
+  --bit-trim: #ddd6fe;
+  animation: bit-celebrate 0.72s steps(2, end) infinite;
+}
+
+.bit-panicking .bit-eye {
+  width: 12px;
+  height: 3px;
+  top: 14px;
+  transform: rotate(45deg);
+}
+
+.bit-panicking .bit-eye::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--bit-glow);
+  transform: rotate(90deg);
+  box-shadow: 0 0 10px var(--bit-glow);
+}
+
+.bit-panicking .bit-mouth {
+  width: 17px;
+  height: 13px;
+  border-top: 3px solid var(--bit-glow);
+}
+
+.bit-concerned .bit-eye {
+  height: 4px;
+  top: 15px;
+}
+
+.bit-concerned .bit-mouth {
+  bottom: 8px;
+  height: 3px;
+  border: 0;
+  background: var(--bit-glow);
+}
+
+.bit-exhausted .bit-bot {
+  bottom: 13px;
+  transform: translateX(-50%) scaleY(0.9);
+  filter: grayscale(0.4) drop-shadow(0 8px 7px rgba(0, 0, 0, 0.4));
+}
+
+.bit-exhausted .bit-head {
+  transform: translateX(-50%) translateY(22px) skewY(-3deg);
+}
+
+.bit-exhausted .bit-body {
+  transform: translateX(-50%) translateY(28px);
+}
+
+.bit-exhausted .bit-arm {
+  top: 123px;
+}
+
+.bit-exhausted .bit-leg {
+  top: 151px;
+}
+
+.bit-exhausted .bit-eye,
+.bit-exhausted .bit-mouth {
+  display: none;
+}
+
+.bit-exhausted .bit-sleep-text {
+  display: flex;
+}
+
+.bit-exhausted .bit-token-orbit {
+  display: none;
+}
+
+.bit-exhausted .bit-shadow {
+  width: 126px;
+  opacity: 0.58;
+  animation: none;
+}
+
+.bit-active {
+  animation: bit-grab 0.34s ease both;
+}
+
+.bit-active .bit-bot {
+  transform: translateX(-50%) scale(0.95);
+}
+
+.bit-activity-scan .bit-eye {
+  animation: bit-eye-scan 1.2s steps(3, end) infinite;
+}
+
+.bit-activity-type .bit-arm-left {
+  animation: bit-type-left 0.44s steps(2, end) infinite;
+}
+
+.bit-activity-type .bit-arm-right {
+  animation: bit-type-right 0.44s steps(2, end) infinite;
+}
+
+.bit-activity-type .bit-code-particles {
+  animation: bit-code-read 1.6s steps(4, end) infinite;
+}
+
+.bit-activity-snack .bit-token-orbit {
+  animation: bit-snack 1.4s ease-in-out infinite;
+}
+
+.bit-activity-snack .bit-mouth {
+  animation: bit-nom 0.7s steps(2, end) infinite;
+}
+
+.bit-panicking .bit-aura {
+  opacity: 0.82;
+}
+
+.bit-exhausted .bit-aura {
+  opacity: 0.28;
+}
+
+.food-toggle-button {
+  right: -28px;
+  bottom: 42px;
+  z-index: 10;
+}
+
+@keyframes bit-hover {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bit-shadow {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: translateX(-50%) scale(0.78);
+    opacity: 0.25;
+  }
+}
+
+@keyframes bit-concerned-hover {
+  0%,
+  100% {
+    transform: translateY(2px);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes bit-glitch {
+  0%,
+  100% {
+    transform: translateX(-2px) translateY(0);
+    filter: saturate(1.1);
+  }
+
+  50% {
+    transform: translateX(2px) translateY(-1px);
+    filter: saturate(1.45);
+  }
+}
+
+@keyframes bit-celebrate {
+  0%,
+  100% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(-18px) rotate(2deg);
+  }
+}
+
+@keyframes bit-grab {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.96);
+  }
+}
+
+@keyframes bit-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bit-eye-scan {
+  0%,
+  100% {
+    transform: translateX(-3px);
+  }
+
+  50% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes bit-type-left {
+  0%,
+  100% {
+    transform: rotate(20deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(6deg) translateY(5px);
+  }
+}
+
+@keyframes bit-type-right {
+  0%,
+  100% {
+    transform: rotate(-6deg) translateY(5px);
+  }
+
+  50% {
+    transform: rotate(-20deg) translateY(0);
+  }
+}
+
+@keyframes bit-code-read {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  30%,
+  80% {
+    opacity: 0.8;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bit-snack {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: translate(-28px, 18px) rotate(180deg) scale(0.74);
+  }
+}
+
+@keyframes bit-nom {
+  0%,
+  100% {
+    height: 8px;
+  }
+
+  50% {
+    height: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bit,
+  .bit-active,
+  .bit-token-orbit,
+  .bit-shadow,
+  .bit-code-particles,
+  .bit-eye,
+  .bit-arm,
+  .bit-mouth {
+    animation: none;
+  }
+}
+
+/* v0.3 industrial Bit shell: modular hardware, glass LCD, chamfered voxel edges. */
+.companion-stage {
+  min-height: 286px;
+}
+
+.companion-idle-cluster {
+  min-width: 306px;
+  min-height: 282px;
+}
+
+.bit {
+  --bit-glow: #85ff9a;
+  --bit-shell: #263039;
+  --bit-shell-mid: #313d45;
+  --bit-shell-hi: #48545c;
+  --bit-shell-low: #10171d;
+  --bit-accent: #52c765;
+  --bit-accent-hi: #a8ff9b;
+  --bit-body-top: #3a4646;
+  --bit-body-mid: #1f2b2c;
+  --bit-body-low: #121b1e;
+  --bit-panel: #07110d;
+  --bit-seam: #0a1015;
+  --bit-warning: #f6c24b;
+  --bit-danger: #ff5364;
+  width: 284px;
+  height: 270px;
+  filter: saturate(1.04) contrast(1.02);
+  animation: bit-industrial-hover 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.bit-bot {
+  bottom: 42px;
+  width: 188px;
+  height: 206px;
+  filter:
+    drop-shadow(0 18px 16px rgba(0, 0, 0, 0.34))
+    drop-shadow(0 0 18px color-mix(in srgb, var(--bit-glow) 20%, transparent));
+}
+
+.bit-shadow {
+  bottom: 28px;
+  width: 154px;
+  height: 25px;
+  background: radial-gradient(ellipse, rgba(10, 14, 20, 0.42) 0%, rgba(10, 14, 20, 0.18) 42%, transparent 72%);
+  animation: bit-industrial-shadow 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.bit-aura {
+  top: 34px;
+  width: 206px;
+  height: 200px;
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--bit-glow) 18%, transparent) 0%, transparent 60%),
+    radial-gradient(circle at 52% 38%, rgba(255, 255, 255, 0.16), transparent 28%);
+  opacity: 0.72;
+}
+
+.bit-holo-panel {
+  position: absolute;
+  left: 198px;
+  top: 72px;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 5px;
+  min-width: 76px;
+  padding: 5px 7px;
+  border: 1px solid color-mix(in srgb, var(--bit-glow) 60%, transparent);
+  color: color-mix(in srgb, var(--bit-glow) 72%, white);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--bit-glow) 18%, transparent), transparent),
+    rgba(7, 17, 13, 0.24);
+  box-shadow:
+    inset 0 0 12px color-mix(in srgb, var(--bit-glow) 18%, transparent),
+    0 0 14px color-mix(in srgb, var(--bit-glow) 24%, transparent);
+  font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-shadow: 0 0 8px var(--bit-glow);
+  transform: skewX(-8deg);
+  opacity: 0.82;
+  pointer-events: none;
+}
+
+.bit-holo-panel strong {
+  font-size: 8px;
+}
+
+.bit-holo-panel::before,
+.bit-holo-panel::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border: 1px solid color-mix(in srgb, var(--bit-glow) 72%, white);
+  box-shadow: 0 0 9px var(--bit-glow);
+  transform: translateY(-50%);
+}
+
+.bit-holo-panel::before {
+  left: -14px;
+}
+
+.bit-holo-panel::after {
+  right: -8px;
+  width: 3px;
+  height: 3px;
+  background: var(--bit-glow);
+}
+
+.bit-head {
+  left: 50%;
+  top: 14px;
+  width: 128px;
+  height: 104px;
+  border: 0;
+  border-radius: 13px;
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 27%),
+    linear-gradient(180deg, var(--bit-shell-hi), var(--bit-shell) 34%, var(--bit-shell-low));
+  box-shadow:
+    inset 0 0 0 4px #141d23,
+    inset 0 9px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -11px 0 rgba(0, 0, 0, 0.34),
+    inset 11px 0 0 rgba(255, 255, 255, 0.04),
+    inset -9px 0 0 rgba(0, 0, 0, 0.2),
+    13px 12px 0 rgba(0, 0, 0, 0.13),
+    0 0 24px color-mix(in srgb, var(--bit-glow) 24%, transparent);
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+.bit-head::before {
+  left: 13px;
+  right: 13px;
+  top: -15px;
+  height: 14px;
+  border: 0;
+  background:
+    linear-gradient(180deg, #606b70, #242d34 80%),
+    var(--bit-shell-mid);
+  clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 8px, calc(100% - 8px) 100%, 8px 100%, 0 8px);
+  box-shadow:
+    0 -7px 0 -1px #3e484e,
+    0 -13px 0 -2px #20282f,
+    inset 0 2px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.32);
+}
+
+.bit-head::after {
+  content: "";
+  position: absolute;
+  left: 11px;
+  right: 11px;
+  bottom: 8px;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.24);
+  box-shadow: 0 -83px 0 rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.bit-head-shell-back {
+  position: absolute;
+  inset: 6px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 0 0 2px rgba(0, 0, 0, 0.36),
+    inset 0 -7px 16px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+}
+
+.bit-head-layer {
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.bit-head-layer-top {
+  top: 11px;
+}
+
+.bit-head-layer-mid {
+  top: 18px;
+}
+
+.bit-ear {
+  top: 38px;
+  width: 25px;
+  height: 43px;
+  border: 0;
+  border-radius: 5px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.22), transparent 38%),
+    linear-gradient(180deg, var(--bit-accent-hi), var(--bit-accent) 48%, #255833);
+  box-shadow:
+    inset 0 0 0 4px rgba(16, 23, 29, 0.48),
+    inset 0 -8px 0 rgba(0, 0, 0, 0.18),
+    0 0 13px color-mix(in srgb, var(--bit-glow) 34%, transparent);
+}
+
+.bit-ear-left {
+  left: -17px;
+}
+
+.bit-ear-right {
+  right: -17px;
+}
+
+.bit-screen {
+  left: 16px;
+  right: 16px;
+  top: 31px;
+  height: 54px;
+  border: 0;
+  border-radius: 7px;
+  clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+  background:
+    radial-gradient(circle at 48% 48%, color-mix(in srgb, var(--bit-glow) 10%, transparent), transparent 44%),
+    linear-gradient(180deg, #101d17, #020705 75%);
+  box-shadow:
+    inset 0 0 0 3px #050b08,
+    inset 0 0 18px rgba(0, 0, 0, 0.88),
+    inset 0 8px 12px rgba(255, 255, 255, 0.05),
+    0 0 18px color-mix(in srgb, var(--bit-glow) 28%, transparent);
+  overflow: hidden;
+}
+
+.bit-screen-glass {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.17), transparent 26%, transparent 56%, rgba(255, 255, 255, 0.06)),
+    repeating-linear-gradient(0deg, transparent 0 5px, rgba(255, 255, 255, 0.025) 5px 6px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.bit-eye {
+  top: 16px;
+  width: 16px;
+  height: 16px;
+  background: var(--bit-glow);
+  border-radius: 2px;
+  box-shadow:
+    0 0 9px var(--bit-glow),
+    0 0 20px color-mix(in srgb, var(--bit-glow) 62%, transparent);
+}
+
+.bit-eye-left {
+  left: 20px;
+}
+
+.bit-eye-right {
+  right: 20px;
+}
+
+.bit-mouth {
+  bottom: 10px;
+  width: 21px;
+  height: 9px;
+  border: 0;
+  background: var(--bit-glow);
+  clip-path: polygon(0 0, 100% 0, 100% 42%, 72% 42%, 72% 100%, 28% 100%, 28% 42%, 0 42%);
+  box-shadow: 0 0 9px var(--bit-glow);
+}
+
+.bit-sleep-text {
+  color: #d3c08a;
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+.bit-neck {
+  top: 118px;
+  width: 50px;
+  height: 16px;
+  border-radius: 3px;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent),
+    linear-gradient(180deg, var(--bit-accent-hi), #315f37 72%);
+  box-shadow:
+    inset 0 0 0 3px rgba(9, 14, 18, 0.42),
+    0 0 10px color-mix(in srgb, var(--bit-glow) 26%, transparent);
+}
+
+.bit-body {
+  top: 134px;
+  width: 94px;
+  height: 70px;
+  border: 0;
+  border-radius: 10px;
+  clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 32%),
+    linear-gradient(180deg, var(--bit-body-top), var(--bit-body-mid) 42%, var(--bit-body-low));
+  box-shadow:
+    inset 0 0 0 4px #11191d,
+    inset 0 8px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -10px 0 rgba(0, 0, 0, 0.24),
+    10px 9px 0 rgba(0, 0, 0, 0.1),
+    0 0 14px color-mix(in srgb, var(--bit-glow) 18%, transparent);
+}
+
+.bit-body-plate {
+  position: absolute;
+  inset: 10px 13px 12px;
+  border-radius: 5px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), transparent 34%),
+    color-mix(in srgb, var(--bit-accent) 28%, #17231b);
+  box-shadow:
+    inset 0 0 0 3px rgba(6, 13, 10, 0.55),
+    inset 0 -8px 0 rgba(0, 0, 0, 0.18);
+}
+
+.bit-core {
+  left: 25px;
+  right: 25px;
+  top: 21px;
+  height: 30px;
+  border: 0;
+  background: color-mix(in srgb, var(--bit-glow) 36%, #102116);
+  box-shadow:
+    inset 0 0 0 3px rgba(4, 10, 7, 0.62),
+    0 0 10px color-mix(in srgb, var(--bit-glow) 24%, transparent);
+}
+
+.bit-chest-icon {
+  left: 38px;
+  top: 34px;
+  width: 20px;
+  height: 16px;
+  border: 4px solid color-mix(in srgb, var(--bit-glow) 42%, #14351d);
+  border-top-width: 6px;
+  box-shadow: 0 0 7px color-mix(in srgb, var(--bit-glow) 20%, transparent);
+}
+
+.bit-arm,
+.bit-leg {
+  border: 0;
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, var(--bit-shell-mid), #182228 54%, #10171d);
+  box-shadow:
+    inset 0 0 0 4px #121a1f,
+    inset 0 -9px 0 rgba(0, 0, 0, 0.22);
+}
+
+.bit-arm::after,
+.bit-leg::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  height: 9px;
+  bottom: 12px;
+  background: var(--bit-accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--bit-glow) 30%, transparent);
+}
+
+.bit-arm {
+  top: 146px;
+  width: 27px;
+  height: 58px;
+}
+
+.bit-arm-left {
+  left: 26px;
+  transform: rotate(18deg);
+}
+
+.bit-arm-right {
+  right: 26px;
+  transform: rotate(-18deg);
+}
+
+.bit-leg {
+  top: 194px;
+  width: 30px;
+  height: 36px;
+}
+
+.bit-leg-left {
+  left: 57px;
+}
+
+.bit-leg-right {
+  right: 57px;
+}
+
+.bit-token-orbit {
+  left: 210px;
+  top: 112px;
+  width: 46px;
+  height: 46px;
+}
+
+.bit-token {
+  width: 16px;
+  height: 16px;
+  border: 2px solid color-mix(in srgb, var(--bit-glow) 72%, white);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.34), transparent 38%),
+    color-mix(in srgb, var(--bit-glow) 28%, transparent);
+}
+
+.bit-code-particles {
+  left: 32px;
+  top: 70px;
+  width: 62px;
+  height: 58px;
+}
+
+.bit-code-particles span {
+  width: 6px;
+  height: 6px;
+}
+
+.bit-code-particles span:nth-child(5) {
+  left: 42px;
+  top: 6px;
+}
+
+.bit-code-particles span:nth-child(6) {
+  left: 50px;
+  top: 33px;
+}
+
+.bit-confetti {
+  position: absolute;
+  inset: 22px 16px 56px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bit-confetti span {
+  position: absolute;
+  width: 6px;
+  height: 12px;
+  background: var(--bit-glow);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--bit-glow) 60%, transparent);
+}
+
+.bit-confetti span:nth-child(1) {
+  left: 34px;
+  top: 24px;
+  background: #facc15;
+}
+
+.bit-confetti span:nth-child(2) {
+  left: 74px;
+  top: 0;
+  background: #38bdf8;
+}
+
+.bit-confetti span:nth-child(3) {
+  right: 62px;
+  top: 16px;
+  background: #fb7185;
+}
+
+.bit-confetti span:nth-child(4) {
+  right: 24px;
+  top: 58px;
+  background: #86efac;
+}
+
+.bit-confetti span:nth-child(5) {
+  left: 55px;
+  bottom: 16px;
+  background: #c4b5fd;
+}
+
+.bit-confetti span:nth-child(6) {
+  right: 88px;
+  bottom: 2px;
+  background: #fcd34d;
+}
+
+.bit-happy {
+  --bit-glow: #85ff9a;
+  --bit-accent: #52c765;
+  --bit-accent-hi: #a8ff9b;
+  --bit-body-top: #3a4646;
+  --bit-body-mid: #1f2b2c;
+  --bit-body-low: #121b1e;
+}
+
+.bit-relaxed {
+  --bit-glow: #c7f36a;
+  --bit-accent: #8fba42;
+  --bit-accent-hi: #e0ff91;
+  --bit-body-top: #46503a;
+  --bit-body-mid: #2a321f;
+  --bit-body-low: #151b10;
+}
+
+.bit-concerned {
+  --bit-glow: #ffd166;
+  --bit-accent: #b28b2c;
+  --bit-accent-hi: #ffe08a;
+  --bit-body-top: #55472b;
+  --bit-body-mid: #3c321f;
+  --bit-body-low: #1f190d;
+  animation: bit-industrial-concerned 3.8s ease-in-out infinite;
+}
+
+.bit-panicking {
+  --bit-glow: #ff5364;
+  --bit-accent: #8d2b32;
+  --bit-accent-hi: #ff8b94;
+  --bit-body-top: #563033;
+  --bit-body-mid: #32191d;
+  --bit-body-low: #19090c;
+  animation: bit-industrial-glitch 0.26s steps(2, end) infinite;
+}
+
+.bit-exhausted {
+  --bit-glow: #b09b6d;
+  --bit-accent: #3b4439;
+  --bit-accent-hi: #657065;
+  --bit-body-top: #343936;
+  --bit-body-mid: #252b27;
+  --bit-body-low: #161a17;
+  opacity: 0.94;
+}
+
+.bit-unknown {
+  --bit-glow: #b7c1c9;
+  --bit-accent: #49545c;
+  --bit-accent-hi: #7d8991;
+  --bit-body-top: #3a4349;
+  --bit-body-mid: #252d33;
+  --bit-body-low: #151b20;
+}
+
+.bit-celebrating {
+  --bit-glow: #8cffae;
+  --bit-accent: #5adb74;
+  --bit-accent-hi: #d7ff7a;
+  --bit-body-top: #3c5040;
+  --bit-body-mid: #213228;
+  --bit-body-low: #111d16;
+  animation: bit-industrial-celebrate 0.74s steps(2, end) infinite;
+}
+
+.bit-happy .bit-eye {
+  top: 20px;
+  width: 18px;
+  height: 10px;
+  background: transparent;
+  border: 4px solid var(--bit-glow);
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+}
+
+.bit-happy .bit-mouth {
+  width: 18px;
+  height: 8px;
+}
+
+.bit-relaxed .bit-eye {
+  top: 22px;
+  height: 5px;
+  border-radius: 4px;
+}
+
+.bit-relaxed .bit-mouth {
+  width: 19px;
+  height: 4px;
+  clip-path: none;
+}
+
+.bit-concerned .bit-eye {
+  top: 17px;
+  width: 15px;
+  height: 5px;
+  border-radius: 4px;
+}
+
+.bit-concerned .bit-eye-left {
+  transform: rotate(20deg);
+}
+
+.bit-concerned .bit-eye-right {
+  transform: rotate(-20deg);
+}
+
+.bit-concerned .bit-mouth {
+  bottom: 10px;
+  width: 18px;
+  height: 8px;
+  background: transparent;
+  border: 3px solid var(--bit-glow);
+  border-bottom: 0;
+  clip-path: none;
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.bit-concerned .bit-holo-panel strong {
+  color: #ffe08a;
+  font-size: 0;
+}
+
+.bit-concerned .bit-holo-panel strong::after {
+  content: "LOW";
+  font-size: 8px;
+}
+
+.bit-panicking .bit-eye {
+  top: 21px;
+  width: 18px;
+  height: 4px;
+  border-radius: 0;
+  transform: rotate(45deg);
+}
+
+.bit-panicking .bit-eye::after {
+  height: 4px;
+}
+
+.bit-panicking .bit-mouth {
+  bottom: 8px;
+  width: 24px;
+  height: 12px;
+  background: transparent;
+  border: 3px solid var(--bit-glow);
+  border-top: 3px solid var(--bit-glow);
+  clip-path: polygon(0 0, 18% 35%, 34% 0, 50% 35%, 66% 0, 82% 35%, 100% 0, 100% 100%, 0 100%);
+}
+
+.bit-panicking .bit-holo-panel {
+  color: #ffb2ba;
+  border-color: rgba(255, 83, 100, 0.66);
+  background: rgba(95, 14, 26, 0.26);
+}
+
+.bit-panicking .bit-holo-panel strong {
+  font-size: 0;
+}
+
+.bit-panicking .bit-holo-panel strong::after {
+  content: "CRITICAL";
+  font-size: 8px;
+}
+
+.bit-unknown .bit-holo-panel strong {
+  font-size: 0;
+}
+
+.bit-unknown .bit-holo-panel strong::after {
+  content: "SYNC";
+  font-size: 8px;
+}
+
+.bit-celebrating .bit-holo-panel strong {
+  font-size: 0;
+}
+
+.bit-celebrating .bit-holo-panel strong::after {
+  content: "REFRESH";
+  font-size: 8px;
+}
+
+.bit-exhausted .bit-bot {
+  bottom: 24px;
+  transform: translateX(-50%) translateY(31px) scaleY(0.82);
+  filter:
+    grayscale(0.42)
+    drop-shadow(0 12px 11px rgba(0, 0, 0, 0.42));
+}
+
+.bit-exhausted .bit-head {
+  transform: translateX(-50%) translateY(22px) rotate(0deg);
+}
+
+.bit-exhausted .bit-body {
+  transform: translateX(-50%) translateY(30px);
+}
+
+.bit-exhausted .bit-arm {
+  top: 175px;
+}
+
+.bit-exhausted .bit-leg {
+  top: 222px;
+}
+
+.bit-exhausted .bit-holo-panel,
+.bit-exhausted .bit-token-orbit {
+  display: none;
+}
+
+.bit-exhausted .bit-screen {
+  opacity: 0.68;
+}
+
+.bit-celebrating .bit-confetti {
+  animation: bit-confetti-burst 0.78s steps(3, end) infinite;
+}
+
+.bit-celebrating .bit-screen {
+  background:
+    radial-gradient(circle at 30% 36%, color-mix(in srgb, var(--bit-glow) 28%, transparent), transparent 18%),
+    radial-gradient(circle at 64% 56%, rgba(250, 204, 21, 0.22), transparent 17%),
+    #06110b;
+}
+
+.bit-active {
+  animation: bit-industrial-grab 0.34s ease both;
+}
+
+.bit-active .bit-bot {
+  transform: translateX(-50%) scale(0.95);
+}
+
+.bit-activity-scan .bit-eye {
+  animation: bit-industrial-eye-scan 1.4s steps(4, end) infinite;
+}
+
+.bit-activity-type .bit-arm-left {
+  animation: bit-industrial-type-left 0.46s steps(2, end) infinite;
+}
+
+.bit-activity-type .bit-arm-right {
+  animation: bit-industrial-type-right 0.46s steps(2, end) infinite;
+}
+
+.bit-activity-type .bit-code-particles {
+  animation: bit-code-read 1.6s steps(4, end) infinite;
+}
+
+.bit-activity-snack .bit-token-orbit {
+  animation: bit-industrial-snack 1.5s ease-in-out infinite;
+}
+
+.bit-activity-snack .bit-mouth {
+  animation: bit-industrial-nom 0.7s steps(2, end) infinite;
+}
+
+.food-toggle-button {
+  right: -16px;
+  bottom: 88px;
+}
+
+@keyframes bit-industrial-hover {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-13px);
+  }
+}
+
+@keyframes bit-industrial-shadow {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.46;
+  }
+
+  50% {
+    transform: translateX(-50%) scale(0.72);
+    opacity: 0.24;
+  }
+}
+
+@keyframes bit-industrial-concerned {
+  0%,
+  100% {
+    transform: translateY(3px);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes bit-industrial-glitch {
+  0%,
+  100% {
+    transform: translateX(-2px) translateY(0);
+    filter: saturate(1.08) contrast(1.03);
+  }
+
+  50% {
+    transform: translateX(2px) translateY(-1px);
+    filter: saturate(1.48) contrast(1.12);
+  }
+}
+
+@keyframes bit-industrial-celebrate {
+  0%,
+  100% {
+    transform: translateY(-5px) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+}
+
+@keyframes bit-industrial-grab {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.95);
+  }
+}
+
+@keyframes bit-industrial-eye-scan {
+  0%,
+  100% {
+    transform: translateX(-4px);
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes bit-industrial-type-left {
+  0%,
+  100% {
+    transform: rotate(22deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(8deg) translateY(7px);
+  }
+}
+
+@keyframes bit-industrial-type-right {
+  0%,
+  100% {
+    transform: rotate(-8deg) translateY(7px);
+  }
+
+  50% {
+    transform: rotate(-22deg) translateY(0);
+  }
+}
+
+@keyframes bit-industrial-snack {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: translate(-45px, 25px) rotate(180deg) scale(0.68);
+  }
+}
+
+@keyframes bit-industrial-nom {
+  0%,
+  100% {
+    height: 9px;
+  }
+
+  50% {
+    height: 3px;
+  }
+}
+
+@keyframes bit-confetti-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+
+  38%,
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.14);
+  }
+}
+
+/* Performance pass: keep Bit fully visible and light enough for an always-on desktop window. */
+.companion-stage {
+  position: relative;
+  min-height: 216px;
+}
+
+.companion-idle-cluster {
+  min-width: 214px;
+  min-height: 210px;
+}
+
+.bit {
+  width: 196px;
+  height: 184px;
+  filter: none;
+  animation-duration: 5.8s;
+}
+
+.bit-bot {
+  bottom: 10px;
+  transform: translateX(-50%) scale(0.68);
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.28));
+}
+
+.bit-active .bit-bot {
+  transform: translateX(-50%) scale(0.64);
+}
+
+.bit-shadow {
+  bottom: 12px;
+  width: 106px;
+  height: 17px;
+  animation-duration: 5.8s;
+}
+
+.bit-aura {
+  display: none;
+}
+
+.bit-holo-panel {
+  left: 132px;
+  top: 44px;
+  transform: scale(0.82) skewX(-8deg);
+  transform-origin: left center;
+  opacity: 0.72;
+}
+
+.bit-token-orbit {
+  left: 144px;
+  top: 82px;
+  transform: scale(0.78);
+  transform-origin: center;
+  animation-duration: 7.5s;
+}
+
+.bit-code-particles {
+  display: none;
+}
+
+.bit-confetti {
+  inset: 10px 8px 26px;
+}
+
+.bit-panicking,
+.bit-celebrating,
+.bit-concerned {
+  animation-duration: 0.62s;
+}
+
+.food-toggle-button {
+  right: -2px;
+  bottom: 62px;
+}
+
+/* Low-power default: Bit is an always-on monitor, so avoid continuous repaint. */
+.bit,
+.bit-shadow,
+.bit-token-orbit,
+.bit-code-particles,
+.bit-confetti,
+.bit-eye,
+.bit-arm,
+.bit-mouth,
+.bit-panicking,
+.bit-celebrating,
+.bit-concerned,
+.bit-activity-scan .bit-eye,
+.bit-activity-type .bit-arm-left,
+.bit-activity-type .bit-arm-right,
+.bit-activity-type .bit-code-particles,
+.bit-activity-snack .bit-token-orbit,
+.bit-activity-snack .bit-mouth {
+  animation: none !important;
+}
+
+.bit-token-orbit,
+.bit-code-particles,
+.bit-confetti {
+  display: none;
+}
+
+.bit-bot {
+  transition: transform 160ms ease;
+}
+
+.bit-active .bit-bot {
+  transform: translateX(-50%) scale(0.62);
+}
+
+.bit-holo-panel {
+  left: 124px;
+  top: 42px;
+  grid-template-columns: 1fr;
+  gap: 3px;
+  width: 138px;
+  min-width: 138px;
+  padding: 7px 9px;
+  border: 1px solid color-mix(in srgb, var(--bit-glow) 72%, white);
+  color: color-mix(in srgb, var(--bit-glow) 48%, #1f2937);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.82), rgba(236, 253, 245, 0.62)),
+    color-mix(in srgb, var(--bit-glow) 10%, transparent);
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.62),
+    0 0 16px color-mix(in srgb, var(--bit-glow) 28%, transparent);
+  opacity: 0.46;
+}
+
+.bit-holo-panel span {
+  color: color-mix(in srgb, var(--bit-glow) 54%, #374151);
+  font-size: 7px;
+  font-weight: 900;
+}
+
+.bit-holo-panel strong,
+.bit-concerned .bit-holo-panel strong,
+.bit-panicking .bit-holo-panel strong,
+.bit-unknown .bit-holo-panel strong,
+.bit-celebrating .bit-holo-panel strong {
+  color: #0f172a;
+  font-size: 9px;
+  font-weight: 900;
+  white-space: normal;
+}
+
+.bit-concerned .bit-holo-panel strong::after,
+.bit-panicking .bit-holo-panel strong::after,
+.bit-unknown .bit-holo-panel strong::after,
+.bit-celebrating .bit-holo-panel strong::after {
+  content: none;
+}
+
+.bit-status-visible .bit-holo-panel {
+  opacity: 0.96;
+  transform: scale(0.9) skewX(-8deg);
+  box-shadow:
+    inset 0 0 12px rgba(255, 255, 255, 0.72),
+    0 0 22px color-mix(in srgb, var(--bit-glow) 42%, transparent);
+}
+
+.bit-panicking .bit-holo-panel {
+  color: #7f1d1d;
+  background:
+    linear-gradient(90deg, rgba(255, 245, 245, 0.88), rgba(254, 226, 226, 0.72)),
+    rgba(255, 83, 100, 0.14);
+}
+
+.bit-concerned .bit-holo-panel {
+  color: #713f12;
+  background:
+    linear-gradient(90deg, rgba(255, 251, 235, 0.88), rgba(254, 243, 199, 0.72)),
+    rgba(255, 209, 102, 0.14);
+}
+
+/* Reference-state expression pass. Keep these last so each mood reads like the design sheet. */
+.bit-holo-panel span {
+  content: "QUOTA";
+  display: none;
+}
+
+.bit-holo-panel strong,
+.bit-concerned .bit-holo-panel strong,
+.bit-panicking .bit-holo-panel strong,
+.bit-unknown .bit-holo-panel strong,
+.bit-celebrating .bit-holo-panel strong {
+  display: block;
+  color: #102018;
+  font-size: 8px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.bit-exhausted .bit-holo-panel {
+  display: none;
+}
+
+.bit-happy .bit-eye {
+  top: 18px;
+  width: 16px;
+  height: 12px;
+  background: transparent;
+  border: 3px solid var(--bit-glow);
+  border-bottom: 0;
+  border-radius: 14px 14px 0 0;
+}
+
+.bit-happy .bit-mouth {
+  bottom: 9px;
+  width: 16px;
+  height: 8px;
+  background: transparent;
+  border: 3px solid var(--bit-glow);
+  border-top: 0;
+  clip-path: none;
+}
+
+.bit-relaxed .bit-eye {
+  top: 22px;
+  width: 15px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--bit-glow);
+}
+
+.bit-relaxed .bit-mouth {
+  bottom: 11px;
+  width: 17px;
+  height: 4px;
+  background: var(--bit-glow);
+  clip-path: none;
+}
+
+.bit-concerned .bit-screen {
+  box-shadow:
+    inset 0 0 0 3px #120b04,
+    inset 0 0 18px rgba(0, 0, 0, 0.88),
+    0 0 18px color-mix(in srgb, var(--bit-glow) 28%, transparent);
+}
+
+.bit-concerned .bit-eye {
+  top: 18px;
+  width: 15px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--bit-glow);
+}
+
+.bit-concerned .bit-eye-left {
+  transform: rotate(34deg);
+}
+
+.bit-concerned .bit-eye-right {
+  transform: rotate(-34deg);
+}
+
+.bit-concerned .bit-mouth {
+  bottom: 9px;
+  width: 18px;
+  height: 8px;
+  background: transparent;
+  border: 3px solid var(--bit-glow);
+  border-bottom: 0;
+  clip-path: none;
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.bit-panicking .bit-screen {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 83, 100, 0.14), transparent 48%),
+    linear-gradient(180deg, #1d090b, #050203 75%);
+}
+
+.bit-concerned .bit-body,
+.bit-panicking .bit-body {
+  box-shadow:
+    inset 0 0 0 4px #11191d,
+    inset 0 8px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -10px 0 rgba(0, 0, 0, 0.24),
+    10px 9px 0 rgba(0, 0, 0, 0.1),
+    0 0 18px color-mix(in srgb, var(--bit-glow) 28%, transparent);
+}
+
+.bit-concerned .bit-body-plate,
+.bit-panicking .bit-body-plate {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 34%),
+    color-mix(in srgb, var(--bit-accent) 46%, #161b18);
+}
+
+.bit-panicking .bit-eye {
+  top: 20px;
+  width: 18px;
+  height: 4px;
+  background: var(--bit-glow);
+  border-radius: 0;
+  transform: rotate(45deg);
+}
+
+.bit-panicking .bit-eye::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  height: 4px;
+  background: var(--bit-glow);
+  transform: rotate(90deg);
+}
+
+.bit-panicking .bit-mouth {
+  bottom: 8px;
+  width: 25px;
+  height: 12px;
+  background: var(--bit-glow);
+  border: 0;
+  clip-path: polygon(0 35%, 12% 0, 24% 35%, 36% 0, 48% 35%, 60% 0, 72% 35%, 84% 0, 100% 35%, 100% 72%, 0 72%);
+}
+
+.bit-exhausted .bit-eye,
+.bit-exhausted .bit-mouth {
+  display: none;
+}
+
+.bit-exhausted .bit-sleep-text {
+  display: flex;
+  color: #d5c59d;
+  font-size: 18px;
+}
+
+.bit-celebrating .bit-token-orbit,
+.bit-celebrating .bit-confetti {
+  display: block;
+  opacity: 1;
+}
+
+.bit-celebrating .bit-eye {
+  top: 14px;
+  width: 14px;
+  height: 14px;
+  border: 3px solid var(--bit-glow);
+  border-radius: 50%;
+  background: transparent;
+}
+
+.bit-celebrating .bit-eye::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 4px;
+  height: 4px;
+  background: var(--bit-glow);
+  box-shadow: 0 0 8px var(--bit-glow);
+}
+
+.bit-celebrating .bit-mouth {
+  bottom: 8px;
+  width: 22px;
+  height: 12px;
+  background: transparent;
+  border: 3px solid var(--bit-glow);
+  border-top: 0;
+  border-radius: 0 0 12px 12px;
+  clip-path: none;
+}
+
+/* Exhausted must stay fully visible inside the compact desktop window. */
+.bit-exhausted .bit-bot {
+  bottom: 5px;
+  transform: translateX(-50%) scale(0.62);
+  transform-origin: 50% 100%;
+  filter:
+    grayscale(0.5)
+    drop-shadow(0 9px 8px rgba(0, 0, 0, 0.34));
+}
+
+.bit-exhausted .bit-head {
+  transform: translateX(-50%) translateY(10px) rotate(1deg);
+}
+
+.bit-exhausted .bit-body {
+  transform: translateX(-50%) translateY(24px);
+}
+
+.bit-exhausted .bit-arm {
+  top: 172px;
+  height: 52px;
+}
+
+.bit-exhausted .bit-leg {
+  top: 213px;
+  width: 36px;
+  height: 28px;
+  z-index: 4;
+  transform: rotate(0deg);
+}
+
+.bit-exhausted .bit-leg-left {
+  left: 43px;
+}
+
+.bit-exhausted .bit-leg-right {
+  right: 43px;
+}
+
+.bit-exhausted .bit-leg::after {
+  bottom: 6px;
+  height: 8px;
+  opacity: 0.55;
+}
+
+.bit-exhausted .bit-arm-left {
+  left: 23px;
+  transform: rotate(28deg);
+}
+
+.bit-exhausted .bit-arm-right {
+  right: 23px;
+  transform: rotate(-28deg);
+}
+
+/* Food view must prioritize meters and the Details control. */
+.app-shell-food {
+  gap: 8px;
+  padding-top: 10px;
+  padding-bottom: 14px;
+}
+
+.app-shell-food .companion-stage {
+  min-height: 176px;
+}
+
+.app-shell-food .companion-idle-cluster {
+  min-height: 172px;
+}
+
+.app-shell-food .bit {
+  height: 166px;
+}
+
+.app-shell-food .bit-bot {
+  bottom: -4px;
+  transform: translateX(-50%) scale(0.58);
+}
+
+.app-shell-food .bit-active .bit-bot {
+  transform: translateX(-50%) scale(0.45);
+}
+
+.app-shell-food .companion-panel {
+  width: min(100%, 330px);
+  max-height: calc(100vh - 205px);
+  overflow-y: auto;
+  scrollbar-color: rgba(244, 244, 245, 0.7) rgba(24, 24, 27, 0.5);
+}
+
+.app-shell-food .quota-panel,
+.app-shell-food .utility-panel {
+  min-width: 0;
+}
+
+/* Final size standard: Bit stays small and consistent across compact, food, and details. */
+.companion-stage,
+.app-shell-food .companion-stage,
+.app-shell-details .companion-stage {
+  min-height: 188px;
+}
+
+.companion-idle-cluster,
+.app-shell-food .companion-idle-cluster,
+.app-shell-details .companion-idle-cluster {
+  min-width: 214px;
+  min-height: 184px;
+}
+
+.bit,
+.app-shell-food .bit,
+.app-shell-details .bit {
+  width: 190px;
+  height: 176px;
+}
+
+.bit-bot,
+.app-shell-food .bit-bot,
+.app-shell-details .bit-bot {
+  bottom: 5px;
+  transform: translateX(-50%) scale(0.42);
+  transform-origin: 50% 100%;
+}
+
+.bit-active .bit-bot,
+.app-shell-food .bit-active .bit-bot,
+.app-shell-details .bit-active .bit-bot {
+  transform: translateX(-50%) scale(0.4);
+}
+
+.bit-exhausted .bit-bot,
+.app-shell-food .bit-exhausted .bit-bot,
+.app-shell-details .bit-exhausted .bit-bot {
+  bottom: 2px;
+  transform: translateX(-50%) scale(0.4);
+  transform-origin: 50% 100%;
+}
+
+.food-toggle-button {
+  right: 6px;
+  bottom: 54px;
+}
+
+/* Keep the 5H status readout inside the transparent window. */
+.bit-holo-panel {
+  left: 106px;
+  top: 38px;
+  width: 74px;
+  min-width: 74px;
+  padding: 6px 8px;
+  transform: scale(0.86) skewX(-8deg);
+  pointer-events: auto;
+  cursor: pointer;
+  appearance: none;
+}
+
+.bit-status-visible .bit-holo-panel {
+  transform: scale(0.9) skewX(-8deg);
+}
+
+.bit-holo-panel:hover,
+.bit-holo-panel[aria-expanded="true"] {
+  opacity: 0.98;
+  box-shadow:
+    inset 0 0 12px rgba(255, 255, 255, 0.82),
+    0 0 20px color-mix(in srgb, var(--bit-glow) 46%, transparent);
+}
+
+.bit-holo-panel strong,
+.bit-concerned .bit-holo-panel strong,
+.bit-panicking .bit-holo-panel strong,
+.bit-unknown .bit-holo-panel strong,
+.bit-celebrating .bit-holo-panel strong {
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.bit-speech-bubble {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  z-index: 20;
+  width: min(250px, calc(100vw - 28px));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.bit-speech-bubble .bubble {
+  position: relative;
+  width: 100%;
+  min-height: 38px;
+  border-color: rgba(244, 244, 245, 0.84);
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: none;
+}
+
+.bit-speech-bubble .bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid rgba(244, 244, 245, 0.84);
+  border-bottom: 2px solid rgba(244, 244, 245, 0.84);
+  background: rgba(15, 23, 42, 0.88);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.app-shell-panel-above .bit-speech-bubble {
+  top: auto;
+  bottom: 0;
+}
+
+.app-shell-panel-above .bit-speech-bubble .bubble {
+  transform-origin: 50% 0;
+}
+
+.app-shell-panel-above .bit-speech-bubble .bubble::after {
+  top: -7px;
+  bottom: auto;
+  transform: translateX(-50%) rotate(225deg);
+}
+
+/* Simple glass treatment for the expanded quota panel. */
+.companion-panel {
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.66), rgba(15, 23, 42, 0.42)),
+    rgba(15, 23, 42, 0.36);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(14px) saturate(1.18);
+}
+
+.app-shell-panel-above .companion-panel::after,
+.app-shell-panel-below .companion-panel::before {
+  border-color: rgba(255, 255, 255, 0.48);
+  background: rgba(15, 23, 42, 0.56);
+  backdrop-filter: blur(10px);
+}
+
+.food-meter-primary,
+.food-meter-secondary,
+.auto-usage-panel,
+.rate-limit-panel,
+.source-status,
+.diagnostics,
+.debug-section,
+.quota-alert {
+  border-color: rgba(255, 255, 255, 0.34);
+  background: rgba(15, 23, 42, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+.food-meter-primary {
+  border-color: rgba(255, 255, 255, 0.58);
+}
+
+.quota-alert {
+  background: rgba(92, 50, 5, 0.46);
+}
+
+.quota-alert-critical {
+  background: rgba(88, 9, 31, 0.48);
+}
+
+.auto-usage-readout div {
+  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(2, 6, 23, 0.32);
+}
+
+.feed-toggle,
+.refresh-button,
+.import-button {
+  border-color: rgba(255, 255, 255, 0.64);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    0 8px 16px rgba(0, 0, 0, 0.14);
+}
+
+@media (prefers-color-scheme: light) {
+  .companion-panel {
+    border-color: rgba(255, 255, 255, 0.72);
+    background:
+      linear-gradient(135deg, rgba(15, 23, 42, 0.76), rgba(15, 23, 42, 0.54)),
+      rgba(15, 23, 42, 0.46);
+    box-shadow:
+      0 18px 38px rgba(15, 23, 42, 0.24),
+      0 0 0 1px rgba(15, 23, 42, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  }
+
+  .app-shell-panel-above .companion-panel::after,
+  .app-shell-panel-below .companion-panel::before {
+    border-color: rgba(255, 255, 255, 0.72);
+    background: rgba(15, 23, 42, 0.66);
+  }
+
+  .food-meter-primary,
+  .food-meter-secondary,
+  .auto-usage-panel,
+  .rate-limit-panel,
+  .source-status,
+  .diagnostics,
+  .debug-section,
+  .quota-alert {
+    border-color: rgba(255, 255, 255, 0.42);
+    background: rgba(15, 23, 42, 0.5);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .companion-panel {
+    border-color: rgba(255, 255, 255, 0.36);
+    background:
+      linear-gradient(135deg, rgba(15, 23, 42, 0.58), rgba(15, 23, 42, 0.34)),
+      rgba(15, 23, 42, 0.3);
+    box-shadow:
+      0 14px 30px rgba(0, 0, 0, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  }
+
+  .app-shell-panel-above .companion-panel::after,
+  .app-shell-panel-below .companion-panel::before {
+    border-color: rgba(255, 255, 255, 0.36);
+    background: rgba(15, 23, 42, 0.5);
+  }
+
+  .food-meter-primary,
+  .food-meter-secondary,
+  .auto-usage-panel,
+  .rate-limit-panel,
+  .source-status,
+  .diagnostics,
+  .debug-section,
+  .quota-alert {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(15, 23, 42, 0.36);
+  }
+}
+
+/* The compact 5H readout must stay readable on any desktop background. */
+.bit-holo-panel,
+.bit-status-visible .bit-holo-panel,
+.bit-exhausted .bit-holo-panel {
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 106px;
+  top: 38px;
+  width: 96px;
+  min-width: 96px;
+  height: 28px;
+  min-height: 28px;
+  padding: 6px 8px;
+  border-color: color-mix(in srgb, var(--bit-glow) 74%, rgba(255, 255, 255, 0.92));
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.84), rgba(236, 253, 245, 0.64)),
+    color-mix(in srgb, var(--bit-glow) 14%, transparent);
+  opacity: 0.9;
+  overflow: visible;
+  transform: scale(0.9) skewX(-8deg);
+}
+
+.bit-holo-panel strong,
+.bit-concerned .bit-holo-panel strong,
+.bit-panicking .bit-holo-panel strong,
+.bit-unknown .bit-holo-panel strong,
+.bit-celebrating .bit-holo-panel strong,
+.bit-exhausted .bit-holo-panel strong {
+  position: relative;
+  z-index: 2;
+  display: block !important;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 1 !important;
+  white-space: nowrap;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.72),
+    0 0 8px color-mix(in srgb, var(--bit-glow) 52%, transparent);
+}
+
+.bit-holo-panel:hover,
+.bit-holo-panel[aria-expanded="true"] {
+  opacity: 1;
+}
+
+/* Performance pass: keep behavior, reduce transparent-window repaint cost. */
+.companion-panel,
+.app-shell-panel-above .companion-panel::after,
+.app-shell-panel-below .companion-panel::before {
+  backdrop-filter: none !important;
+}
+
+.companion-panel {
+  background: rgba(15, 23, 42, 0.72);
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.food-meter-primary,
+.food-meter-secondary,
+.auto-usage-panel,
+.rate-limit-panel,
+.source-status,
+.diagnostics,
+.debug-section,
+.quota-alert,
+.auto-usage-readout div,
+.feed-toggle,
+.refresh-button,
+.import-button {
+  box-shadow: none !important;
+}
+
+.bit-aura,
+.bit-token-orbit,
+.bit-code-particles {
+  display: none !important;
+}
+
+.bit-bot,
+.bit-shadow,
+.bit-head,
+.bit-head-shell,
+.bit-head-layer,
+.bit-screen,
+.bit-body,
+.bit-arm,
+.bit-leg {
+  filter: none !important;
+}
+
+.bit-bot {
+  animation: none !important;
+}
+
+.bit-shadow {
+  animation: none !important;
+  opacity: 0.58;
+}
+
+.bit-holo-panel,
+.bit-status-visible .bit-holo-panel,
+.bit-holo-panel:hover,
+.bit-holo-panel[aria-expanded="true"] {
+  box-shadow:
+    inset 0 0 6px rgba(255, 255, 255, 0.5),
+    0 0 8px color-mix(in srgb, var(--bit-glow) 24%, transparent) !important;
+}
+
+.bit-holo-panel strong,
+.bit-concerned .bit-holo-panel strong,
+.bit-panicking .bit-holo-panel strong,
+.bit-unknown .bit-holo-panel strong,
+.bit-celebrating .bit-holo-panel strong,
+.bit-exhausted .bit-holo-panel strong {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.bit-screen,
+.bit-eye,
+.bit-mouth,
+.bit-core,
+.bit-chest-icon,
+.bit-ear,
+.bit-neck {
+  box-shadow: none !important;
+}
+
+.bit-panicking .bit-bot {
+  animation: bit-industrial-glitch 0.38s steps(2, end) infinite !important;
+}
+
+.bit-celebrating .bit-bot {
+  animation: bit-industrial-celebrate 0.9s steps(2, end) infinite !important;
+}
+
+.bit-active .bit-bot {
+  transition: transform 120ms ease;
+}
+
+/* Compact drag safety: keep Bit and the 5H badge away from window clipping edges. */
+.app-shell-compact {
+  padding-top: 20px;
+  padding-bottom: 18px;
+}
+
+.app-shell-compact .companion-stage {
+  min-height: 238px;
+}
+
+.app-shell-compact .companion-idle-cluster {
+  min-height: 232px;
+}
+
+.app-shell-compact .bit-holo-panel,
+.app-shell-compact .bit-status-visible .bit-holo-panel,
+.app-shell-compact .bit-exhausted .bit-holo-panel {
+  left: 104px;
+  top: 24px;
+}
+
+.app-shell-body.app-shell-compact {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.app-shell-body.app-shell-compact .companion-stage {
+  min-height: 342px;
+}
+
+.app-shell-body.app-shell-compact .companion-idle-cluster {
+  min-height: 336px;
+}
+
+.app-shell-body.app-shell-compact .bit-holo-panel,
+.app-shell-body.app-shell-compact .bit-status-visible .bit-holo-panel,
+.app-shell-body.app-shell-compact .bit-exhausted .bit-holo-panel {
+  left: 72px;
+  top: 16px;
+}
+
+.app-shell-food .bit-holo-panel,
+.app-shell-food .bit-status-visible .bit-holo-panel,
+.app-shell-food .bit-exhausted .bit-holo-panel,
+.app-shell-details .bit-holo-panel,
+.app-shell-details .bit-status-visible .bit-holo-panel,
+.app-shell-details .bit-exhausted .bit-holo-panel {
+  left: 72px;
+  top: 36px;
+}
+
+.app-shell-body .bit-bot,
+.app-shell-body .bit-active .bit-bot,
+.app-shell-body .bit-exhausted .bit-bot {
+  bottom: 42px;
+}
+
+.app-shell-body .bit-shadow {
+  display: block !important;
+}
+
+.app-shell-docked-left .bit-holo-panel,
+.app-shell-docked-right .bit-holo-panel {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* The expanded panel no longer uses a pointer diamond; it reads as a flat HUD card. */
+.app-shell-panel-above .companion-panel::after,
+.app-shell-panel-below .companion-panel::before {
+  display: none !important;
+}
+
+/* Lightweight idle life: Bit blinks occasionally without JS timers. */
+.app-shell-pose-head .bit-body,
+.app-shell-pose-head .bit-arm,
+.app-shell-pose-head .bit-leg,
+.app-shell-pose-head .bit-shadow {
+  display: none !important;
+}
+
+.app-shell-pose-head .bit-bot,
+.app-shell-pose-head .bit-active .bit-bot,
+.app-shell-pose-head .bit-exhausted .bit-bot {
+  bottom: 18px;
+}
+
+.app-shell-food .bit-neck,
+.app-shell-food .bit-body,
+.app-shell-food .bit-arm,
+.app-shell-food .bit-leg,
+.app-shell-details .bit-neck,
+.app-shell-details .bit-body,
+.app-shell-details .bit-arm,
+.app-shell-details .bit-leg {
+  display: block !important;
+}
+
+.app-shell-food .bit-shadow {
+  display: block !important;
+  bottom: -18px;
+  width: 88px;
+  height: 14px;
+  opacity: 0.42;
+}
+
+.app-shell-details .bit-shadow {
+  display: block !important;
+  bottom: -10px;
+  width: 88px;
+  height: 14px;
+  opacity: 0.42;
+}
+
+.app-shell-food.app-shell-panel-above,
+.app-shell-details.app-shell-panel-above {
+  gap: 8px;
+}
+
+.app-shell-food.app-shell-panel-above .companion-stage {
+  margin-top: -28px;
+}
+
+.app-shell-details.app-shell-panel-above .companion-stage {
+  margin-top: -18px;
+}
+
+.app-shell-food.app-shell-panel-above .bit-bot,
+.app-shell-food.app-shell-panel-above .bit-active .bit-bot,
+.app-shell-details.app-shell-panel-above .bit-bot,
+.app-shell-details.app-shell-panel-above .bit-active .bit-bot {
+  bottom: 4px;
+}
+
+.app-shell-food.app-shell-panel-above .bit-shadow {
+  bottom: -19px;
+}
+
+.app-shell-details.app-shell-panel-above .bit-shadow {
+  bottom: -11px;
+}
+
+.bit-happy .bit-eye,
+.bit-relaxed .bit-eye,
+.bit-concerned .bit-eye,
+.bit-unknown .bit-eye {
+  transform-origin: 50% 50%;
+  animation: bit-idle-blink 5.8s steps(1, end) infinite;
+}
+
+@keyframes bit-idle-blink {
+  0%,
+  84%,
+  91%,
+  100% {
+    transform: scaleY(1);
+  }
+
+  86%,
+  89% {
+    transform: scaleY(0.08);
+  }
+}
+
+/* Final mood motion pass: keep Bit alive without constant expensive transparent-window repaint. */
+.bit-happy .bit-bot {
+  animation: none !important;
+}
+
+.bit-relaxed .bit-bot {
+  animation: none !important;
+}
+
+.bit-concerned .bit-bot {
+  animation: bit-mood-concerned 5.4s steps(2, end) infinite !important;
+}
+
+.bit-panicking .bit-bot {
+  animation: bit-mood-panicking 0.5s steps(2, end) infinite !important;
+}
+
+.bit-exhausted .bit-bot,
+.app-shell-food .bit-exhausted .bit-bot,
+.app-shell-details .bit-exhausted .bit-bot {
+  animation: none !important;
+}
+
+.bit-celebrating .bit-bot {
+  animation: bit-mood-celebrating 1.1s steps(2, end) infinite !important;
+}
+
+.bit-happy .bit-eye,
+.bit-relaxed .bit-eye {
+  animation: bit-idle-blink 7.2s steps(1, end) infinite !important;
+}
+
+.bit-concerned .bit-eye {
+  animation: bit-concerned-eye-pulse 3.2s steps(2, end) infinite !important;
+}
+
+.bit-panicking .bit-screen {
+  animation: bit-panicking-screen-flash 0.7s steps(2, end) infinite !important;
+}
+
+.bit-panicking .bit-mouth {
+  animation: bit-panicking-mouth-jitter 0.44s steps(2, end) infinite !important;
+}
+
+.bit-exhausted .bit-sleep-text {
+  animation: bit-sleep-text-pulse 3.8s steps(2, end) infinite !important;
+}
+
+.bit-celebrating .bit-token-orbit,
+.bit-celebrating .bit-confetti {
+  animation: bit-confetti-burst 1.8s steps(3, end) infinite !important;
+}
+
+@keyframes bit-mood-happy {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) scale(0.42);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-7px) scale(0.43);
+  }
+}
+
+@keyframes bit-mood-relaxed {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) scale(0.42);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-4px) scale(0.42);
+  }
+}
+
+@keyframes bit-mood-concerned {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(1px) scale(0.42);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(0) scale(0.42);
+  }
+}
+
+@keyframes bit-mood-panicking {
+  0%,
+  100% {
+    transform: translateX(calc(-50% - 2px)) translateY(1px) scale(0.42);
+  }
+
+  50% {
+    transform: translateX(calc(-50% + 2px)) translateY(-1px) scale(0.425);
+  }
+}
+
+@keyframes bit-mood-exhausted {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) scale(0.4);
+    opacity: 0.82;
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(2px) scale(0.4);
+    opacity: 0.96;
+  }
+}
+
+@keyframes bit-mood-celebrating {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(-2px) rotate(-2deg) scale(0.42);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-13px) rotate(2deg) scale(0.44);
+  }
+}
+
+@keyframes bit-concerned-eye-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes bit-panicking-screen-flash {
+  0%,
+  100% {
+    opacity: 0.82;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes bit-panicking-mouth-jitter {
+  0%,
+  100% {
+    width: 25px;
+  }
+
+  50% {
+    width: 21px;
+  }
+}
+
+@keyframes bit-sleep-text-pulse {
+  0%,
+  100% {
+    opacity: 0.46;
+  }
+
+  50% {
+    opacity: 0.86;
+  }
+}
+
+/* Food panel fit pass: the two food meters and Details should sit on one page. */
+.app-shell-food .companion-panel {
+  gap: 6px;
+  padding: 8px;
+  max-height: none;
+  overflow: visible;
+}
+
+.app-shell-food .quota-panel {
+  gap: 6px;
+}
+
+.app-shell-food .food-meter-row {
+  gap: 5px;
+}
+
+.app-shell-food .food-meter-primary,
+.app-shell-food .food-meter-secondary {
+  padding: 7px;
+}
+
+.app-shell-food .food-meter-primary .food-meter-track {
+  height: 14px;
+}
+
+.app-shell-food .food-meter-track {
+  height: 10px;
+}
+
+.app-shell-food .feed-toggle {
+  min-width: 104px;
+  padding: 7px 12px;
+}
+
+/* Bit-matched glass HUD: graphite hardware shell with a subtle green edge. */
+.companion-panel {
+  border-color: rgba(134, 239, 172, 0.34);
+  background:
+    linear-gradient(135deg, rgba(40, 52, 58, 0.76), rgba(14, 23, 24, 0.58)),
+    rgba(15, 23, 42, 0.5);
+  color: #f8fafc;
+  box-shadow:
+    0 10px 24px rgba(2, 6, 23, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 0 0 1px rgba(134, 239, 172, 0.1);
+  backdrop-filter: blur(10px) saturate(1.08) !important;
+}
+
+.companion-panel-header {
+  color: rgba(226, 232, 240, 0.78);
+}
+
+.food-meter-primary,
+.food-meter-secondary,
+.auto-usage-panel,
+.rate-limit-panel,
+.source-status,
+.diagnostics,
+.debug-section,
+.quota-alert {
+  border-color: rgba(134, 239, 172, 0.28);
+  background:
+    linear-gradient(180deg, rgba(17, 31, 29, 0.72), rgba(15, 23, 42, 0.52));
+}
+
+.food-meter-primary {
+  border-color: rgba(187, 247, 208, 0.48);
+}
+
+.food-meter-header {
+  color: #f8fafc;
+}
+
+.food-meter-track {
+  border-color: rgba(248, 250, 252, 0.84);
+  background: rgba(2, 6, 23, 0.82);
+}
+
+.feed-toggle {
+  border-color: rgba(187, 247, 208, 0.72);
+  background: linear-gradient(180deg, #67e8f9, #22d3ee);
+  color: #071317;
+}
+
+@media (prefers-color-scheme: light) {
+  .companion-panel {
+    border-color: rgba(21, 128, 61, 0.34);
+    background:
+      linear-gradient(135deg, rgba(31, 41, 55, 0.78), rgba(15, 23, 42, 0.62)),
+      rgba(15, 23, 42, 0.56);
+    box-shadow:
+      0 12px 26px rgba(15, 23, 42, 0.2),
+      0 0 0 1px rgba(15, 23, 42, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .food-meter-primary,
+  .food-meter-secondary,
+  .auto-usage-panel,
+  .rate-limit-panel,
+  .source-status,
+  .diagnostics,
+  .debug-section,
+  .quota-alert {
+    border-color: rgba(187, 247, 208, 0.34);
+    background:
+      linear-gradient(180deg, rgba(17, 31, 29, 0.78), rgba(15, 23, 42, 0.58));
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .companion-panel {
+    border-color: rgba(134, 239, 172, 0.3);
+    background:
+      linear-gradient(135deg, rgba(40, 52, 58, 0.68), rgba(14, 23, 24, 0.48)),
+      rgba(15, 23, 42, 0.42);
+    box-shadow:
+      0 10px 22px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  }
+}
+
+/* Details view uses the same Bit glass language, with tighter spacing but unchanged text size. */
+.app-shell-details .companion-panel {
+  gap: 7px;
+  padding: 8px;
+}
+
+.app-shell-details .quota-panel,
+.app-shell-details .utility-panel,
+.app-shell-details .utility-panel-body,
+.app-shell-details .debug-section-body {
+  gap: 6px;
+}
+
+.app-shell-details .food-meter-row {
+  gap: 5px;
+}
+
+.app-shell-details .food-meter-primary,
+.app-shell-details .food-meter-secondary,
+.app-shell-details .auto-usage-panel,
+.app-shell-details .rate-limit-panel,
+.app-shell-details .source-status,
+.app-shell-details .diagnostics,
+.app-shell-details .debug-section,
+.app-shell-details .quota-alert,
+.app-shell-details .mood-test-panel {
+  border-color: rgba(134, 239, 172, 0.26);
+  background:
+    linear-gradient(180deg, rgba(17, 31, 29, 0.68), rgba(15, 23, 42, 0.48));
+}
+
+.app-shell-details .food-meter-primary,
+.app-shell-details .food-meter-secondary,
+.app-shell-details .auto-usage-panel,
+.app-shell-details .rate-limit-panel,
+.app-shell-details .source-status,
+.app-shell-details .diagnostics,
+.app-shell-details .quota-alert,
+.app-shell-details .mood-test-panel {
+  padding: 7px;
+}
+
+.app-shell-details .debug-section summary {
+  padding: 7px 8px;
+}
+
+.app-shell-details .debug-section-body {
+  padding: 0 7px 7px;
+}
+
+.app-shell-details .auto-usage-readout {
+  gap: 5px;
+}
+
+.app-shell-details .auto-usage-readout div {
+  padding: 5px;
+  border-color: rgba(134, 239, 172, 0.18);
+  background: rgba(2, 6, 23, 0.28);
+}
+
+.app-shell-details .refresh-button,
+.app-shell-details .feed-toggle {
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+/* Token-eating metaphor: quota drops become a small token meal for Bit. */
+.bit-token-feed {
+  position: absolute;
+  left: 112px;
+  top: 52px;
+  z-index: 40;
+  display: block;
+  width: 86px;
+  height: 64px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.bit-token-feed span {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 2px solid color-mix(in srgb, var(--bit-glow) 76%, white);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.34), transparent 42%),
+    color-mix(in srgb, var(--bit-glow) 48%, rgba(255, 255, 255, 0.28));
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--bit-glow) 72%, transparent),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+}
+
+.bit-token-feed span:nth-child(1) {
+  left: 52px;
+  top: 8px;
+}
+
+.bit-token-feed span:nth-child(2) {
+  left: 36px;
+  top: 24px;
+  transform: scale(0.72);
+  opacity: 0.78;
+}
+
+.bit-token-feed span:nth-child(3) {
+  left: 62px;
+  top: 38px;
+  transform: scale(0.58);
+  opacity: 0.58;
+}
+
+.bit-feeding .bit-token-feed {
+  opacity: 1 !important;
+}
+
+.bit-feeding .bit-token-feed span {
+  animation: bit-feed-token 1.35s cubic-bezier(0.35, 0, 0.2, 1) both;
+}
+
+.bit-feeding .bit-token-feed span:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.bit-feeding .bit-token-feed span:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.bit-feeding .bit-mouth {
+  animation: bit-feed-nom 0.42s steps(2, end) 3 !important;
+}
+
+.bit-feeding .bit-screen {
+  box-shadow:
+    inset 0 0 0 3px #050b08,
+    inset 0 0 18px rgba(0, 0, 0, 0.88),
+    0 0 14px color-mix(in srgb, var(--bit-glow) 32%, transparent) !important;
+}
+
+.bit-mouth-token {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  z-index: 7;
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid color-mix(in srgb, var(--bit-glow) 76%, white);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.42), transparent 44%),
+    color-mix(in srgb, var(--bit-glow) 58%, rgba(255, 255, 255, 0.28));
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--bit-glow) 78%, transparent),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+  opacity: 0;
+  transform: translateX(-50%) scale(0.2) rotate(0deg);
+}
+
+.bit-feeding .bit-mouth-token {
+  animation: bit-mouth-token-eat 1.65s cubic-bezier(0.35, 0, 0.2, 1) both;
+}
+
+.food-meter-primary .food-meter-track,
+.food-meter-secondary .food-meter-track {
+  position: relative;
+  overflow: hidden;
+}
+
+.food-meter-primary .food-meter-track::after,
+.food-meter-secondary .food-meter-track::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.16) 0 3px,
+      transparent 3px 10px
+    );
+  pointer-events: none;
+  opacity: 0.34;
+}
+
+.food-meter-fill {
+  background:
+    linear-gradient(180deg, #fde047, #eab308),
+    #facc15;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+/* Quota-adaptive token food colors, shared by 5H and 7D meters. */
+.food-meter-row {
+  --meter-food: #facc15;
+  --meter-food-hi: #fde047;
+  --meter-edge: rgba(250, 204, 21, 0.42);
+}
+
+.food-meter-healthy {
+  --meter-food: #22c55e;
+  --meter-food-hi: #86efac;
+  --meter-edge: rgba(134, 239, 172, 0.5);
+}
+
+.food-meter-stable {
+  --meter-food: #65a30d;
+  --meter-food-hi: #bef264;
+  --meter-edge: rgba(190, 242, 100, 0.46);
+}
+
+.food-meter-concerned {
+  --meter-food: #f59e0b;
+  --meter-food-hi: #fde68a;
+  --meter-edge: rgba(253, 230, 138, 0.44);
+}
+
+.food-meter-panicking {
+  --meter-food: #ef4444;
+  --meter-food-hi: #fca5a5;
+  --meter-edge: rgba(252, 165, 165, 0.48);
+}
+
+.food-meter-exhausted,
+.food-meter-unknown {
+  --meter-food: #64748b;
+  --meter-food-hi: #cbd5e1;
+  --meter-edge: rgba(203, 213, 225, 0.42);
+}
+
+.food-meter-primary,
+.food-meter-secondary {
+  border-color: var(--meter-edge);
+}
+
+.food-meter-fill {
+  background:
+    linear-gradient(180deg, var(--meter-food-hi), var(--meter-food)),
+    var(--meter-food);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 0 10px color-mix(in srgb, var(--meter-food) 36%, transparent);
+}
+
+@keyframes bit-feed-token {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(1.12) rotate(0deg);
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  72% {
+    opacity: 1;
+    transform: translate(-38px, 18px) scale(0.86) rotate(90deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-58px, 28px) scale(0.18) rotate(160deg);
+  }
+}
+
+@keyframes bit-feed-nom {
+  0%,
+  100% {
+    transform: translateX(-50%) scaleY(1);
+  }
+
+  50% {
+    transform: translateX(-50%) scaleY(0.28);
+  }
+}
+
+@keyframes bit-mouth-token-eat {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px) scale(0.45) rotate(0deg);
+  }
+
+  18% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1.25) rotate(45deg);
+  }
+
+  62% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(19px) scale(0.9) rotate(135deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(25px) scale(0.08) rotate(225deg);
+  }
 }
